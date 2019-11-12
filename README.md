@@ -1,6 +1,6 @@
 ## 动机
 
-兼容 next.js 的简化版[REAUX](https://github.com/vocoWone/reaux)
+遵循[REAUX]的思想(https://github.com/vocoWone/reaux)应用于[NEXT](https://nextjs.org/)
 
 ## API
 

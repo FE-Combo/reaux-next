@@ -1,0 +1,31 @@
+{
+  "name": "reaux-next",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "jest": "",
+    "build": ""
+  },
+  "author": "vocoWone",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "12.6.1",
+    "react": "^16.9.0",
+    "ts-node": "8.3.0",
+    "tslib": "1.10.0",
+    "tslint": "5.18.0",
+    "tslint-react": "4.0.0",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@types/react-redux": "^7.1.2",
+    "@types/redux-logger": "^3.0.7",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6"
+  }
+}

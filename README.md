@@ -1,6 +1,6 @@
 ## 动机
 
-遵循[REAUX](https://github.com/vocoWone/reaux)的思想应用于[NEXT](https://nextjs.org/)
+遵循[REAUX](https://github.com/vocoWone/reaux)思想并应用于[NEXT](https://nextjs.org/)框架
 
 ## API
 

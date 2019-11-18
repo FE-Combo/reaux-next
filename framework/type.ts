@@ -45,7 +45,7 @@ export abstract class BaseModel<S = {}> {
   abstract state: Readonly<S>;
   abstract rootState: Readonly<StateView>;
   abstract setState(newState: Partial<S>): void;
-  async onReady(content: any) {
+  async onReady(context: any) {
     // extends to be overrode
   }
   async onLoad() {

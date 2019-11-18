@@ -8,3 +8,4 @@ output*/
 node_modules/
 /*/yarn-error.log
 .next/
+build/

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.dev",
+  "compilerOptions": {
+    "target": "esnext",
+    "outDir": "../dist",
+    "sourceMap": true,
+    "declaration": true
+  },
+  "include": ["../framework"]
+}

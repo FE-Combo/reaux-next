@@ -2,14 +2,14 @@
   "name": "reaux-next",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "jest": ""
+    "output": "rm -rf dist && tsc -p config/tsconfig.build.json"
   },
   "author": "vocoWone",
   "license": "ISC",

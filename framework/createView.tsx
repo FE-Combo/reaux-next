@@ -9,10 +9,12 @@ import { BaseModel } from "./type";
 export function createView<H extends BaseModel>(
   handler: H,
   Component: React.ComponentType<any>
-) {
+): React.ComponentType<any> & {
+  getInitialProps: (context: any) => any;
+} {
   return class View<P extends {} = {}> extends React.PureComponent<P> {
     static async getInitialProps(context: any) {
-      return await handler.onReady(context);
+      return (await handler.onReady()) || {};
     }
 
     componentDidMount() {

@@ -1,4 +1,4 @@
-import React, { PureComponent, ComponentType } from "react";
+import React, { ComponentClass, ComponentType } from "react";
 import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
 import { createStore, applyMiddleware } from "redux";
@@ -11,6 +11,7 @@ import {
   setHelperAction
 } from "./createReducer";
 import { asyncMiddleware } from "./middleware";
+import { SET_STATE_ACTION } from "./util";
 import { StateView, BaseModel, AppCache, Exception } from "./type";
 import { Helper } from "./helper";
 
@@ -38,16 +39,23 @@ const { cache, helper } = createApp();
 
 function start(
   Component: ComponentType<any> & {
-    getInitialProps: (context: any) => void;
-  }
-) {
-  return class App extends PureComponent {
+    getInitialProps: (context: any) => any;
+  },
+  BaseApp: ComponentClass
+): ComponentType<any> & {
+  getInitialProps: (context: any) => any;
+} {
+  return class App extends BaseApp {
     static async getInitialProps(context: any) {
+      cache.context = context;
+      const appProps =
+        typeof Component.getInitialProps === "function"
+          ? await Component.getInitialProps(context)
+          : {};
+      const superProps = await super["getInitialProps"](context);
       return {
-        appProps:
-          typeof Component.getInitialProps === "function"
-            ? await Component.getInitialProps(context)
-            : {}
+        ...superProps,
+        ...appProps
       };
     }
     render() {
@@ -83,8 +91,11 @@ class Model<S> extends BaseModel<S> {
       throw new Error("store unknown!!");
     }
     cache.store.dispatch(
-      setStateAction(moduleName, initState, `@@${moduleName}/initState`)
+      setStateAction(moduleName, initState, SET_STATE_ACTION)
     );
+  }
+  get context(): Readonly<any> {
+    return cache.context;
   }
   get state(): Readonly<S> {
     return cache.store.getState().app[this.moduleName];
@@ -94,11 +105,7 @@ class Model<S> extends BaseModel<S> {
   }
   setState(newState: Partial<S>) {
     cache.store.dispatch(
-      setStateAction(
-        this.moduleName,
-        newState,
-        `@@${this.moduleName}/setState[${Object.keys(newState).join(",")}]`
-      )
+      setStateAction(this.moduleName, newState, SET_STATE_ACTION)
     );
   }
 }

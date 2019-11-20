@@ -14,7 +14,6 @@ export function createPromiseMiddleware(): AsyncMiddleware {
   const middleware: AsyncMiddleware = (
     api: MiddlewareAPI
   ) => next => async actions => {
-    next(actions);
     if (!cache.actionHandlers) {
       throw new Error(
         "Invoking action before execute async middleware.run function only!!"
@@ -28,6 +27,7 @@ export function createPromiseMiddleware(): AsyncMiddleware {
         console.error(`runtimeError: ${error}`);
       }
     }
+    next(actions);
   };
 
   middleware.run = function(app: AppCache, errorCallback?: ErrorCallback): any {

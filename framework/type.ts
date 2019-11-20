@@ -1,6 +1,7 @@
 import { Store, Action } from "redux";
 
 export interface AppCache {
+  context?: any;
   actionHandlers: {};
   modules: {};
   store: Store<StateView>;
@@ -45,16 +46,16 @@ export abstract class BaseModel<S = {}> {
   abstract state: Readonly<S>;
   abstract rootState: Readonly<StateView>;
   abstract setState(newState: Partial<S>): void;
-  async onReady(context: any) {
+  async onReady(): Promise<any> {
     // extends to be overrode
   }
-  async onLoad() {
+  async onLoad(): Promise<any> {
     // extends to be overrode
   }
-  async onUnload() {
+  async onUnload(): Promise<any> {
     // extends to be overrode
   }
-  async onHide() {
+  async onHide(): Promise<any> {
     // extends to be overrode
   }
 }

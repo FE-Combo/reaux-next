@@ -3,14 +3,13 @@ import { register, Model } from "../../framework";
 import { State } from "./type";
 
 const initialState: State = {
-  name: "main"
+  name: "about"
 };
 
 class ActionHandler extends Model<State> {
   async onReady() {
-    // TODO;
-    console.info("main");
-    this.text();
+    console.info("about");
+    // return { about: "about" };
   }
   async text() {
     // TODO:
@@ -18,6 +17,6 @@ class ActionHandler extends Model<State> {
 }
 
 export const { actions, View } = register(
-  new ActionHandler("main", initialState),
+  new ActionHandler("about", initialState),
   Main
 );

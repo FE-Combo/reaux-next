@@ -1,10 +1,11 @@
+[![npm version](https://img.shields.io/npm/v/reaux-next.svg?style=flat)](https://www.npmjs.com/package/reaux-next)  
+
 ## 动机
 
 复用[REAUX](https://github.com/vocoWone/reaux)特性，依赖于[NEXT](https://nextjs.org/)
 
 ## API
 
-TODO
 
 - start
 

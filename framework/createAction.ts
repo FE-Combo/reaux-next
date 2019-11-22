@@ -4,7 +4,7 @@ type ActionCreators<H> = {
   readonly [K in {
     [K in keyof H]: H[K] extends (...args: any[]) => any ? K : never;
   }[keyof H]]: H[K] extends (...args: infer P) => any
-    ? ((...args: P) => ActionType<P>)
+    ? (...args: P) => ActionType<P>
     : never;
 };
 

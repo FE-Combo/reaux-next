@@ -11,7 +11,7 @@ import {
   setHelperAction
 } from "./createReducer";
 import { asyncMiddleware } from "./middleware";
-import { SET_STATE_ACTION } from "./util";
+import { SET_STATE_ACTION, INIT_CLIENT_APP, INIT_CLIENT_HELPER } from "./util";
 import { StateView, BaseModel, AppCache, Exception } from "./type";
 import { Helper } from "./helper";
 
@@ -22,13 +22,21 @@ function createApp(): { cache: AppCache; helper: Helper } {
     store: createStore(
       createReducer(),
       composeWithDevTools({})(
-        applyMiddleware(createLogger({ collapsed: true }), asyncMiddleware)
+        applyMiddleware(
+          createLogger({
+            collapsed: true,
+            predicate: (state, action) =>
+              action.type !== INIT_CLIENT_APP &&
+              action.type !== INIT_CLIENT_HELPER
+          }),
+          asyncMiddleware
+        )
       )
     )
   };
-  const helper = new Helper(cache, (type, payload) => {
-    setHelperAction(type, payload);
-  });
+  const helper = new Helper(cache, (type, payload) =>
+    setHelperAction(type, payload)
+  );
   asyncMiddleware.run(cache, (exception: Exception) => {
     helper.exception = exception;
   });
@@ -41,7 +49,7 @@ function start(
   Component: ComponentType<any> & {
     getInitialProps: (context: any) => any;
   },
-  BaseApp: ComponentClass
+  BaseApp: ComponentClass<any>
 ): ComponentType<any> & {
   getInitialProps: (context: any) => any;
 } {
@@ -54,9 +62,21 @@ function start(
           : {};
       const superProps = await super["getInitialProps"](context);
       return {
+        initialReduxState: cache.store.getState(),
         ...superProps,
         ...appProps
       };
+    }
+    constructor(props) {
+      super(props);
+      cache.store.dispatch({
+        type: INIT_CLIENT_APP,
+        payload: props.initialReduxState.app
+      });
+      cache.store.dispatch({
+        type: INIT_CLIENT_HELPER,
+        payload: props.initialReduxState.helper
+      });
     }
     render() {
       return (
@@ -90,9 +110,6 @@ class Model<S> extends BaseModel<S> {
     if (!cache.store) {
       throw new Error("store unknown!!");
     }
-    cache.store.dispatch(
-      setStateAction(moduleName, initState, SET_STATE_ACTION)
-    );
   }
   get context(): Readonly<any> {
     return cache.context;
@@ -106,6 +123,11 @@ class Model<S> extends BaseModel<S> {
   setState(newState: Partial<S>) {
     cache.store.dispatch(
       setStateAction(this.moduleName, newState, SET_STATE_ACTION)
+    );
+  }
+  resetState() {
+    cache.store.dispatch(
+      setStateAction(this.moduleName, this.initState, SET_STATE_ACTION)
     );
   }
 }

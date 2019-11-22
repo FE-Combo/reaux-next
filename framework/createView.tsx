@@ -14,6 +14,7 @@ export function createView<H extends BaseModel>(
 } {
   return class View<P extends {} = {}> extends React.PureComponent<P> {
     static async getInitialProps(context: any) {
+      handler.resetState();
       return (await handler.onReady()) || {};
     }
 

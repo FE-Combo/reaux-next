@@ -46,6 +46,7 @@ export abstract class BaseModel<S = {}> {
   abstract state: Readonly<S>;
   abstract rootState: Readonly<StateView>;
   abstract setState(newState: Partial<S>): void;
+  abstract resetState(): void;
   async onReady(): Promise<any> {
     // extends to be overrode
   }

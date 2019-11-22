@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import { register, Model } from "../../framework";
+import { register, Model, helper } from "../../framework";
 import { State } from "./type";
 
 const initialState: State = {
@@ -7,15 +7,19 @@ const initialState: State = {
 };
 
 class ActionHandler extends Model<State> {
+  @helper.loading()
   async onReady() {
     console.info("home");
-    return { home: "home" };
+    await this.setState({ name: "new name" });
   }
+
+  @helper.loading("button")
   async clickButton() {
-    this.setState({ name: "click button name" });
+    await this.setState({ name: "click button name" });
   }
+
   async text() {
-    // TODO:
+    this.setState({ name: "click button name" });
   }
 }
 

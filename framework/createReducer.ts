@@ -3,7 +3,9 @@ import {
   SET_STATE_ACTION,
   SET_HELPER_LOADING,
   SET_HELPER_LANG,
-  SET_HELPER_EXCEPTION
+  SET_HELPER_EXCEPTION,
+  INIT_CLIENT_APP,
+  INIT_CLIENT_HELPER
 } from "./util";
 import {
   StateView,
@@ -39,10 +41,15 @@ function appReducer(
   state: StateView["app"] = {},
   action: ActionType<any>
 ): StateView["app"] {
+  if (action.type === INIT_CLIENT_APP) {
+    return action.payload;
+  }
+
   if (action.type === SET_STATE_ACTION) {
     const { module, state: moduleState } = action.payload as ActionPayload;
     return { ...state, [module]: { ...state[module], ...moduleState } };
   }
+
   return state;
 }
 
@@ -52,6 +59,9 @@ function helperReducer(
 ): StateView["helper"] {
   const nextState = { ...state };
   switch (action.type) {
+    case INIT_CLIENT_HELPER:
+      return action.payload;
+
     case SET_HELPER_LOADING:
       const {
         hasShow,
@@ -59,7 +69,7 @@ function helperReducer(
       } = action.payload as StateViewHelperLoadingState;
       !nextState.loading && (nextState.loading = {});
       const count = nextState.loading[identifier] || 0;
-      nextState.loading.identifier = count + (hasShow ? 1 : -1);
+      nextState.loading[identifier] = count + (hasShow ? 1 : -1);
       return nextState;
     case SET_HELPER_LANG:
       const lang = action.payload as string;

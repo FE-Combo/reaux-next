@@ -1,6 +1,6 @@
 ## 动机
 
-遵循[REAUX](https://github.com/vocoWone/reaux)思想并应用于[NEXT](https://nextjs.org/)框架
+复用[REAUX](https://github.com/vocoWone/reaux)特性，依赖于[NEXT](https://nextjs.org/)
 
 ## API
 
@@ -9,23 +9,33 @@ TODO
 - start
 
 ```
- TODO
+import { start } from "reaux-next";
+import { View } from "../modules/xxx";
+import BaseApp from "next/app";
+
+export default start(View, BaseApp);
 ```
 
 - register
 
 ```
- TODO
-```
 
-- Model
+import Main from "./component/xxx";
+import { register, Model, helper } from "reaux-next";
+import { State } from "./xxx.type";
 
-```
- TODO
-```
+const namespace = "home";
 
-- helper
+const initialState: State = {
+    name: "home"
+};
 
-```
- TODO
+class ActionHandler extends Model<State> {
+    async text() {
+        this.setState({ name: "click button name" });
+    }
+}
+
+export const { actions, View } = register(new ActionHandler(namespace, initialState),Main);
+
 ```

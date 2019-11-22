@@ -20,10 +20,10 @@ export function handlerDecorator<S extends StateView>(
   interceptor: HandlerInterceptor<S>
 ): HandlerDecorator {
   return (target, name, descriptor) => {
-    const handler = descriptor.value!;
+    const fn = descriptor.value;
     descriptor.value = async function(...args: any[]) {
       const rootState: S = (target as any).rootState;
-      (await interceptor(handler.bind(this, ...args), rootState)) as any;
+      await interceptor(fn!.bind(this, ...args), rootState);
     };
     return descriptor;
   };
@@ -33,6 +33,10 @@ export const isServer = () =>
   process && typeof process === "object" && typeof window === "undefined";
 
 export const SET_STATE_ACTION = "@@framework/setState";
+
+export const INIT_CLIENT_APP = "@@framework/initApp";
+
+export const INIT_CLIENT_HELPER = "@@framework/initHelper";
 
 export const SET_HELPER_LOADING = "@@framework/setHelper/setLoading";
 

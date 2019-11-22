@@ -3,10 +3,8 @@ import { connect } from "react-redux";
 import { actions } from "../index";
 
 const Index = (props: any) => {
-  console.info(props);
   const { name, dispatch } = props;
   const handleClick = () => {
-    console.log(actions.clickButton());
     dispatch(actions.clickButton());
   };
   return (

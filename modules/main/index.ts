@@ -8,9 +8,15 @@ const initialState: State = {
 
 class ActionHandler extends Model<State> {
   async onReady() {
-    // TODO;
+    // 对应next.js中的getInitialProps方法
     console.info("main");
     this.text();
+  }
+  async onLoad() {
+    // mount or update
+  }
+  async onUnload() {
+    // unmount
   }
   async text() {
     // TODO:

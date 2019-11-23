@@ -1,8 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let cache;
 let errorCallback = null;
-export function createPromiseMiddleware() {
+function createPromiseMiddleware() {
     const middleware = (api) => next => async (actions) => {
-        next(actions);
         if (!cache.actionHandlers) {
             throw new Error("Invoking action before execute async middleware.run function only!!");
         }
@@ -15,6 +16,7 @@ export function createPromiseMiddleware() {
                 console.error(`runtimeError: ${error}`);
             }
         }
+        next(actions);
     };
     middleware.run = function (app, errorCallback) {
         cache = app;
@@ -22,5 +24,6 @@ export function createPromiseMiddleware() {
     };
     return middleware;
 }
-export const asyncMiddleware = createPromiseMiddleware();
+exports.createPromiseMiddleware = createPromiseMiddleware;
+exports.asyncMiddleware = createPromiseMiddleware();
 //# sourceMappingURL=middleware.js.map

@@ -1,19 +1,26 @@
-import { combineReducers } from "redux";
-import { SET_STATE_ACTION, SET_HELPER_LOADING, SET_HELPER_LANG, SET_HELPER_EXCEPTION } from "./util";
-export function setStateAction(module, state, type = SET_STATE_ACTION) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const redux_1 = require("redux");
+const util_1 = require("./util");
+function setStateAction(module, state, type = util_1.SET_STATE_ACTION) {
     return {
         type,
         payload: { module, state }
     };
 }
-export function setHelperAction(type, payload) {
+exports.setStateAction = setStateAction;
+function setHelperAction(type, payload) {
     return {
         type,
         payload
     };
 }
+exports.setHelperAction = setHelperAction;
 function appReducer(state = {}, action) {
-    if (action.type === SET_STATE_ACTION) {
+    if (action.type === util_1.INIT_CLIENT_APP) {
+        return action.payload;
+    }
+    if (action.type === util_1.SET_STATE_ACTION) {
         const { module, state: moduleState } = action.payload;
         return { ...state, [module]: { ...state[module], ...moduleState } };
     }
@@ -22,17 +29,19 @@ function appReducer(state = {}, action) {
 function helperReducer(state = {}, action) {
     const nextState = { ...state };
     switch (action.type) {
-        case SET_HELPER_LOADING:
+        case util_1.INIT_CLIENT_HELPER:
+            return action.payload;
+        case util_1.SET_HELPER_LOADING:
             const { hasShow, identifier } = action.payload;
             !nextState.loading && (nextState.loading = {});
             const count = nextState.loading[identifier] || 0;
-            nextState.loading.identifier = count + (hasShow ? 1 : -1);
+            nextState.loading[identifier] = count + (hasShow ? 1 : -1);
             return nextState;
-        case SET_HELPER_LANG:
+        case util_1.SET_HELPER_LANG:
             const lang = action.payload;
             nextState.lang = lang;
             return nextState;
-        case SET_HELPER_EXCEPTION:
+        case util_1.SET_HELPER_EXCEPTION:
             const exception = action.payload;
             nextState.exception = exception;
             return nextState;
@@ -40,11 +49,12 @@ function helperReducer(state = {}, action) {
             return state;
     }
 }
-export function createReducer() {
+function createReducer() {
     const reducers = {
         app: appReducer,
         helper: helperReducer
     };
-    return combineReducers(reducers);
+    return redux_1.combineReducers(reducers);
 }
+exports.createReducer = createReducer;
 //# sourceMappingURL=createReducer.js.map

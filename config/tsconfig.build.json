@@ -4,7 +4,8 @@
     "target": "esnext",
     "outDir": "../dist",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true
   },
   "include": ["../framework"]
 }

@@ -40,6 +40,10 @@ export class Helper {
       }
     });
   }
+  isLoading(identifier: string): boolean {
+    const loading = this.appCache.store.getState().helper.loading;
+    return !!(loading && loading[identifier] > 0);
+  }
   get lang(): string | undefined {
     return this.appCache.store.getState().helper.lang;
   }
@@ -51,5 +55,8 @@ export class Helper {
   }
   set exception(exception: Exception | undefined) {
     this.put(this.setHelperAction(SET_HELPER_EXCEPTION, exception!));
+  }
+  async delay(ms: number) {
+    await new Promise(resolve => setTimeout(resolve, ms));
   }
 }

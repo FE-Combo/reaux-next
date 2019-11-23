@@ -1,8 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * According handler propertyNames generate actions and actionHandlers
  * @param handler Module reference. e.g: const handler = new Module("name",{})
  */
-export function createAction(handler) {
+function createAction(handler) {
     const moduleName = handler.moduleName;
     const keys = getPrototypeOfExceptConstructor(handler);
     const actions = {};
@@ -18,6 +20,7 @@ export function createAction(handler) {
     });
     return { actions, actionHandlers };
 }
+exports.createAction = createAction;
 function getPrototypeOfExceptConstructor(object) {
     return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter(key => key !== "constructor");
 }

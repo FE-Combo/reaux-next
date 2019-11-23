@@ -1,5 +1,6 @@
 import { Store, Action } from "redux";
 export interface AppCache {
+    context?: any;
     actionHandlers: {};
     modules: {};
     store: Store<StateView>;
@@ -34,10 +35,11 @@ export declare abstract class BaseModel<S = {}> {
     abstract state: Readonly<S>;
     abstract rootState: Readonly<StateView>;
     abstract setState(newState: Partial<S>): void;
-    onReady(context: any): Promise<void>;
-    onLoad(): Promise<void>;
-    onUnload(): Promise<void>;
-    onHide(): Promise<void>;
+    abstract resetState(): void;
+    onReady(): Promise<any>;
+    onLoad(): Promise<any>;
+    onUnload(): Promise<any>;
+    onHide(): Promise<any>;
 }
 export declare abstract class Exception {
     message: string;

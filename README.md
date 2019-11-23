@@ -10,7 +10,7 @@
 - 1 个 module 包含 1 个 component，1 个 model
 - 1 个 model 包含 1 个 state，1 个 namespace，3 个生命周期 action，n 个 自定义 action
 - 每个 action 都是 async/await 函数
-- 内建 helper：装饰器 loading、error 处理、lang
+- 内建 helper：loading、error、delay, lang
 - 面向对象式编程
 - 项目结构分工明确
 

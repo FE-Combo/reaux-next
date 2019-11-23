@@ -1,5 +1,7 @@
-export class BaseModel {
-    async onReady(context) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class BaseModel {
+    async onReady() {
         // extends to be overrode
     }
     async onLoad() {
@@ -12,9 +14,11 @@ export class BaseModel {
         // extends to be overrode
     }
 }
-export class Exception {
+exports.BaseModel = BaseModel;
+class Exception {
     constructor(message) {
         this.message = message;
     }
 }
+exports.Exception = Exception;
 //# sourceMappingURL=type.js.map

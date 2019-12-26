@@ -9,12 +9,6 @@ const initialState: State = {
 class ActionHandler extends Model<State> {
   async onReady() {
     console.info("about");
-    await this.text();
-  }
-
-  async text() {
-    // TODO:
-    this.setState({ name: "123" });
   }
 }
 

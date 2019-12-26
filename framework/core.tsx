@@ -1,21 +1,17 @@
-import React, { ComponentClass, ComponentType } from "react";
+import React, { ComponentType } from "react";
 import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createView } from "./createView";
 import { createAction } from "./createAction";
-import {
-  createReducer,
-  setStateAction,
-  setHelperAction
-} from "./createReducer";
+import { createReducer, setStateAction } from "./createReducer";
 import { asyncMiddleware } from "./middleware";
 import { SET_STATE_ACTION, INIT_CLIENT_APP, INIT_CLIENT_HELPER } from "./util";
-import { StateView, BaseModel, AppCache, Exception } from "./type";
+import { StateView, BaseModel, AppCache, StartOptions } from "./type";
 import { Helper } from "./helper";
 
-function createApp(): { cache: AppCache; helper: Helper } {
+function createAppCache(): AppCache {
   const cache = {
     actionHandlers: {},
     modules: {},
@@ -34,25 +30,19 @@ function createApp(): { cache: AppCache; helper: Helper } {
       )
     )
   };
-  const helper = new Helper(cache, (type, payload) =>
-    setHelperAction(type, payload)
-  );
-  asyncMiddleware.run(cache, (exception: Exception) => {
-    helper.exception = exception;
-  });
-  return { cache, helper };
+  asyncMiddleware.run(cache);
+  return cache;
 }
 
-const { cache, helper } = createApp();
+const cache = createAppCache();
+let helper = new Helper(cache);
 
-function start(
-  Component: ComponentType<any> & {
-    getInitialProps: (context: any) => any;
-  },
-  BaseApp: ComponentClass<any>
+function start<T>(
+  options: StartOptions<T>
 ): ComponentType<any> & {
   getInitialProps: (context: any) => any;
 } {
+  const { App: Component, BaseApp } = options;
   return class App extends BaseApp {
     static async getInitialProps(context: any) {
       cache.context = context;

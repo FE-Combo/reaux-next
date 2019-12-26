@@ -1,3 +1,4 @@
+import { ComponentType, ComponentClass } from "react";
 import { Store, Action } from "redux";
 
 export interface AppCache {
@@ -63,4 +64,12 @@ export abstract class BaseModel<S = {}> {
 
 export abstract class Exception {
   protected constructor(public message: string) {}
+}
+
+export interface StartOptions<T> {
+  App: ComponentType<any> & {
+    getInitialProps: (context: any) => any;
+  };
+  BaseApp: ComponentClass<any>;
+  locales?: object;
 }

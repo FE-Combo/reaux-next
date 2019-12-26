@@ -1,14 +1,12 @@
 import { Middleware, MiddlewareAPI } from "redux";
-import { AppCache, Exception } from "./type";
-
-type ErrorCallback = (exception: Exception) => void;
+import { AppCache } from "./type";
+import { SET_HELPER_EXCEPTION } from "./util";
 
 interface AsyncMiddleware extends Middleware {
-  run: (app: AppCache, errorCallback: ErrorCallback) => void;
+  run: (app: AppCache) => void;
 }
 
 let cache: AppCache;
-let errorCallback: ErrorCallback | null = null;
 
 export function createPromiseMiddleware(): AsyncMiddleware {
   const middleware: AsyncMiddleware = (
@@ -23,16 +21,15 @@ export function createPromiseMiddleware(): AsyncMiddleware {
       try {
         await cache.actionHandlers[actions.type](actions.payload);
       } catch (error) {
-        errorCallback && errorCallback(error);
+        cache.store.dispatch({ type: SET_HELPER_EXCEPTION, payload: error });
         console.error(`runtimeError: ${error}`);
       }
     }
     next(actions);
   };
 
-  middleware.run = function(app: AppCache, errorCallback?: ErrorCallback): any {
+  middleware.run = function(app: AppCache): any {
     cache = app;
-    errorCallback = errorCallback;
   };
   return middleware;
 }

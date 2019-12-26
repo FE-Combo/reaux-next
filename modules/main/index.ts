@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import { register, Model } from "../../framework";
+import { register, Model, helper, isServer } from "../../framework";
 import { State } from "./type";
 
 const initialState: State = {
@@ -8,18 +8,11 @@ const initialState: State = {
 
 class ActionHandler extends Model<State> {
   async onReady() {
-    // 对应next.js中的getInitialProps方法
+    if (isServer()) {
+      helper.lang = "ZH";
+    }
+
     console.info("main");
-    this.text();
-  }
-  async onLoad() {
-    // mount or update
-  }
-  async onUnload() {
-    // unmount
-  }
-  async text() {
-    // TODO:
   }
 }
 

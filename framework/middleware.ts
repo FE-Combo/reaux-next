@@ -1,6 +1,6 @@
 import { Middleware, MiddlewareAPI } from "redux";
+import { createActionType } from "./createReducer";
 import { AppCache } from "./type";
-import { SET_HELPER_EXCEPTION } from "./util";
 
 interface AsyncMiddleware extends Middleware {
   run: (app: AppCache) => void;
@@ -21,7 +21,11 @@ export function createPromiseMiddleware(): AsyncMiddleware {
       try {
         await cache.actionHandlers[actions.type](actions.payload);
       } catch (error) {
-        cache.store.dispatch({ type: SET_HELPER_EXCEPTION, payload: error });
+        // TODO: collection error
+        cache.store.dispatch({
+          type: createActionType("@error"),
+          payload: error
+        });
         console.error(`runtimeError: ${error}`);
       }
     }

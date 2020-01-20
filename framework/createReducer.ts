@@ -1,93 +1,40 @@
 import { Reducer, combineReducers, ReducersMapObject } from "redux";
-import {
-  SET_STATE_ACTION,
-  SET_HELPER_LOADING,
-  SET_HELPER_LANG,
-  SET_HELPER_EXCEPTION,
-  INIT_CLIENT_APP,
-  INIT_CLIENT_HELPER
-} from "./util";
-import {
-  StateView,
-  ActionType,
-  ActionPayload,
-  StateViewHelperLoadingState,
-  Exception,
-  HelperActionPayload
-} from "./type";
+import { StateView, ActionType } from "./type";
 
-export function setStateAction<State>(
-  module: string,
-  state: Partial<State>,
-  type: string = SET_STATE_ACTION
-): ActionType<ActionPayload> {
+export function createActionType(namespace: string): string {
+  return `@@framework/actionType/${namespace}`;
+}
+
+export function setModuleAction<State>(
+  namespace: string,
+  state: Partial<State>
+): ActionType<Partial<State>> {
   return {
-    type,
-    payload: { module, state }
+    type: createActionType(namespace),
+    payload: state
   };
 }
 
-export function setHelperAction<T>(
-  type: T,
-  payload: HelperActionPayload
-): ActionType<HelperActionPayload> {
-  return {
-    type,
-    payload
+export function createModuleReducer(namespace: string): Reducer<object> {
+  return (state: {} = {}, action: ActionType<object>) => {
+    const actionType = createActionType(namespace);
+    switch (action.type) {
+      case actionType:
+        const nextState = { ...state, ...action.payload };
+        return nextState;
+      default:
+        return state;
+    }
   };
 }
 
-function appReducer(
-  state: StateView["app"] = {},
-  action: ActionType<any>
-): StateView["app"] {
-  if (action.type === INIT_CLIENT_APP) {
-    return action.payload;
-  }
-
-  if (action.type === SET_STATE_ACTION) {
-    const { module, state: moduleState } = action.payload as ActionPayload;
-    return { ...state, [module]: { ...state[module], ...moduleState } };
-  }
-
-  return state;
-}
-
-function helperReducer(
-  state: StateView["helper"] = {},
-  action: ActionType<any>
-): StateView["helper"] {
-  const nextState = { ...state };
-  switch (action.type) {
-    case INIT_CLIENT_HELPER:
-      return action.payload;
-
-    case SET_HELPER_LOADING:
-      const {
-        hasShow,
-        identifier
-      } = action.payload as StateViewHelperLoadingState;
-      !nextState.loading && (nextState.loading = {});
-      const count = nextState.loading[identifier] || 0;
-      nextState.loading[identifier] = count + (hasShow ? 1 : -1);
-      return nextState;
-    case SET_HELPER_LANG:
-      const lang = action.payload as string;
-      nextState.lang = lang;
-      return nextState;
-    case SET_HELPER_EXCEPTION:
-      const exception = action.payload as Exception;
-      nextState.exception = exception;
-      return nextState;
-    default:
-      return state;
-  }
-}
-
-export function createReducer(): Reducer<StateView> {
+export function createReducer(
+  asyncReducers?: ReducersMapObject<StateView, any>
+): Reducer<StateView> {
   const reducers: ReducersMapObject<StateView, any> = {
-    app: appReducer,
-    helper: helperReducer
+    "@error": createModuleReducer("@error"),
+    "@loading": createModuleReducer("@loading"),
+    ...asyncReducers
   };
   return combineReducers(reducers);
 }

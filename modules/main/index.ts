@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import { register, Model, helper, isServer } from "../../framework";
+import { register, Model } from "../../framework";
 import { State } from "./type";
 
 const initialState: State = {
@@ -8,10 +8,6 @@ const initialState: State = {
 
 class ActionHandler extends Model<State> {
   async onReady() {
-    if (isServer()) {
-      helper.lang = "ZH";
-    }
-
     console.info("main");
   }
 }

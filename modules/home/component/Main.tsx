@@ -3,35 +3,33 @@ import { Button } from "antd";
 import { connect } from "react-redux";
 import { actions } from "../index";
 import { helper } from "../../../framework";
-import { useLocales } from "../../../utils/locales";
 
 const Index = (props: any) => {
-  const t = useLocales();
-  const { loading, name, l, dispatch } = props;
+  const { loading, name, dispatch } = props;
 
   const handleButtonClick = () => dispatch(actions.clickButton());
   const handleGlobalButtonClick = () => dispatch(actions.clickGlobalButton());
-  const changeLang = (lang: string) => (helper.lang = lang);
+  const changeLang = (lang: string) => {
+    //
+  };
   return (
     <>
       <div>
         <span>{name}</span>
         &nbsp;&nbsp;
         <Button onClick={handleButtonClick} loading={loading}>
-          {t.partialLoading}
+          局部加载
         </Button>
         &nbsp;&nbsp;
-        <Button onClick={handleGlobalButtonClick}>{t.globalLoading}</Button>
+        <Button onClick={handleGlobalButtonClick}>全局加载</Button>
       </div>
       <br />
       <div>
-        <span>
-          {t.language}：{l || t.notSet}
-        </span>
+        <span>语言：未设置</span>
         &nbsp;&nbsp;
-        <Button onClick={() => changeLang("ZH")}>{t.SetToZH}</Button>
+        <Button onClick={() => changeLang("ZH")}>设置为中文</Button>
         &nbsp;&nbsp;
-        <Button onClick={() => changeLang("EN")}>{t.SetToEN}</Button>
+        <Button onClick={() => changeLang("EN")}>设置为英文</Button>
       </div>
     </>
   );
@@ -39,7 +37,7 @@ const Index = (props: any) => {
 
 export default connect((state: any) => {
   return {
-    name: state.app.home.name,
+    name: state.home.name,
     loading: helper.isLoading("button")
   };
 })(Index);

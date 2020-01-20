@@ -1,29 +1,39 @@
-import React, { ComponentType } from "react";
-import { Provider } from "react-redux";
-import { createLogger } from "redux-logger";
-import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { createView } from "./createView";
-import { createAction } from "./createAction";
-import { createReducer, setStateAction } from "./createReducer";
-import { asyncMiddleware } from "./middleware";
-import { SET_STATE_ACTION, INIT_CLIENT_APP, INIT_CLIENT_HELPER } from "./util";
-import { StateView, BaseModel, AppCache, StartOptions } from "./type";
 import { Helper } from "./helper";
+import { Provider } from "react-redux";
+import { createView } from "./createView";
+import { createLogger } from "redux-logger";
+import React, { ComponentType } from "react";
+import { createAction } from "./createAction";
+import { asyncMiddleware } from "./middleware";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { StateView, BaseModel, AppCache, StartOptions } from "./type";
+import { createStore, applyMiddleware, ReducersMapObject } from "redux";
+import {
+  createActionType,
+  createReducer,
+  setModuleAction,
+  createModuleReducer
+} from "./createReducer";
 
 function createAppCache(): AppCache {
   const cache = {
     actionHandlers: {},
     modules: {},
+    asyncReducers: {} as ReducersMapObject<StateView, any>,
+    injectReducer: (namespace, asyncReducer) => {
+      cache.asyncReducers[namespace] = asyncReducer;
+      cache.store.replaceReducer(createReducer(cache.asyncReducers));
+    },
     store: createStore(
       createReducer(),
-      composeWithDevTools({})(
+      composeWithDevTools({
+        predicate: (state, action) =>
+          !/^@@framework\/actionsHandler/.test(action.type)
+      })(
         applyMiddleware(
           createLogger({
             collapsed: true,
-            predicate: (state, action) =>
-              action.type !== INIT_CLIENT_APP &&
-              action.type !== INIT_CLIENT_HELPER
+            predicate: () => false
           }),
           asyncMiddleware
         )
@@ -35,7 +45,7 @@ function createAppCache(): AppCache {
 }
 
 const cache = createAppCache();
-let helper = new Helper(cache);
+const helper = new Helper(cache);
 
 function start<T>(
   options: StartOptions<T>
@@ -59,13 +69,12 @@ function start<T>(
     }
     constructor(props) {
       super(props);
-      cache.store.dispatch({
-        type: INIT_CLIENT_APP,
-        payload: props.initialReduxState.app
-      });
-      cache.store.dispatch({
-        type: INIT_CLIENT_HELPER,
-        payload: props.initialReduxState.helper
+      const namespaces = Object.keys(props.initialReduxState);
+      namespaces.forEach(namespace => {
+        cache.store.dispatch({
+          type: createActionType(namespace),
+          payload: props.initialReduxState[namespace]
+        });
       });
     }
     render() {
@@ -88,13 +97,23 @@ function register<H extends BaseModel>(
     );
   }
   cache.modules[handler.moduleName] = true;
+
+  // register reducer
+  const currentModuleReducer = createModuleReducer(handler.moduleName);
+  cache.asyncReducers[handler.moduleName] = currentModuleReducer;
+  cache.store.replaceReducer(createReducer(cache.asyncReducers));
+
+  // register actions
   const { actions, actionHandlers } = createAction(handler);
   cache.actionHandlers = { ...cache.actionHandlers, ...actionHandlers };
+
+  // register view
   const View = createView(handler, Component);
+
   return { View, actions };
 }
 
-class Model<S> extends BaseModel<S> {
+class Model<S = {}> extends BaseModel<S> {
   public constructor(readonly moduleName: string, readonly initState: S) {
     super();
     if (!cache.store) {
@@ -105,20 +124,16 @@ class Model<S> extends BaseModel<S> {
     return cache.context;
   }
   get state(): Readonly<S> {
-    return cache.store.getState().app[this.moduleName];
+    return cache.store.getState()[this.moduleName] as S;
   }
   get rootState(): Readonly<StateView> {
     return cache.store.getState();
   }
   setState(newState: Partial<S>) {
-    cache.store.dispatch(
-      setStateAction(this.moduleName, newState, SET_STATE_ACTION)
-    );
+    cache.store.dispatch(setModuleAction(this.moduleName, newState));
   }
   resetState() {
-    cache.store.dispatch(
-      setStateAction(this.moduleName, this.initState, SET_STATE_ACTION)
-    );
+    cache.store.dispatch(setModuleAction(this.moduleName, this.initState));
   }
 }
 

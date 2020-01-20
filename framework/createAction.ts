@@ -12,6 +12,13 @@ interface ActionHandlers {
   [key: string]: (...args: any[]) => any;
 }
 
+function createActionHandlerType(
+  moduleName: string,
+  ActionHandlerType: string
+) {
+  return `@@framework/actionsHandler(${moduleName}=>${ActionHandlerType})`;
+}
+
 /**
  * According handler propertyNames generate actions and actionHandlers
  * @param handler Module reference. e.g: const handler = new Module("name",{})
@@ -25,7 +32,7 @@ export function createAction<H extends object & { moduleName: string }>(
   const actionHandlers = {} as ActionHandlers;
   keys.forEach(actionType => {
     const method = handler[actionType];
-    const qualifiedActionType = `${moduleName}/${actionType}`;
+    const qualifiedActionType = createActionHandlerType(moduleName, actionType);
     actions[actionType] = (...payload: any[]) => ({
       type: qualifiedActionType,
       payload

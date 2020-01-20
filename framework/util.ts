@@ -31,15 +31,3 @@ export function handlerDecorator<S extends StateView>(
 
 export const isServer = () =>
   process && typeof process === "object" && typeof window === "undefined";
-
-export const SET_STATE_ACTION = "@@framework/setState";
-
-export const INIT_CLIENT_APP = "@@framework/initApp";
-
-export const INIT_CLIENT_HELPER = "@@framework/initHelper";
-
-export const SET_HELPER_LOADING = "@@framework/setHelper/setLoading";
-
-export const SET_HELPER_LANG = "@@framework/setHelper/setLang";
-
-export const SET_HELPER_EXCEPTION = "@@framework/setHelper/exception";

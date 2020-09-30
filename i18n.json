@@ -1,0 +1,7 @@
+{
+  "source": "/modules",
+  "localePath": "/locales",
+  "exportExcelPath": "/.i18n/result.xlsx",
+  "importExcelPath": "/.i18n/result.xlsx",
+  "languages": ["zh", "en"]
+}

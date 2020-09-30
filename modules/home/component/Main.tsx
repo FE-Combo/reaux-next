@@ -17,6 +17,7 @@ const Index = (props: any) => {
       <div>
         <span>{name}</span>
         &nbsp;&nbsp;
+        <i18n>名字</i18n>
         <Button onClick={handleButtonClick} loading={loading}>
           局部加载
         </Button>

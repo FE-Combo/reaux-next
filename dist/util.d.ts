@@ -4,10 +4,4 @@ declare type HandlerDecorator = (target: object, name: string | symbol, descript
 declare type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => any;
 export declare function handlerDecorator<S extends StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator;
 export declare const isServer: () => boolean;
-export declare const SET_STATE_ACTION = "@@framework/setState";
-export declare const INIT_CLIENT_APP = "@@framework/initApp";
-export declare const INIT_CLIENT_HELPER = "@@framework/initHelper";
-export declare const SET_HELPER_LOADING = "@@framework/setHelper/setLoading";
-export declare const SET_HELPER_LANG = "@@framework/setHelper/setLang";
-export declare const SET_HELPER_EXCEPTION = "@@framework/setHelper/exception";
 export {};

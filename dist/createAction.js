@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+function createActionHandlerType(moduleName, ActionHandlerType) {
+    return `@@framework/actionsHandler(${moduleName}=>${ActionHandlerType})`;
+}
 /**
  * According handler propertyNames generate actions and actionHandlers
  * @param handler Module reference. e.g: const handler = new Module("name",{})
@@ -11,7 +14,7 @@ function createAction(handler) {
     const actionHandlers = {};
     keys.forEach(actionType => {
         const method = handler[actionType];
-        const qualifiedActionType = `${moduleName}/${actionType}`;
+        const qualifiedActionType = createActionHandlerType(moduleName, actionType);
         actions[actionType] = (...payload) => ({
             type: qualifiedActionType,
             payload

@@ -1,8 +1,7 @@
 import { Middleware } from "redux";
-import { AppCache, Exception } from "./type";
-declare type ErrorCallback = (exception: Exception) => void;
+import { AppCache } from "./type";
 interface AsyncMiddleware extends Middleware {
-    run: (app: AppCache, errorCallback: ErrorCallback) => void;
+    run: (app: AppCache) => void;
 }
 export declare function createPromiseMiddleware(): AsyncMiddleware;
 export declare const asyncMiddleware: AsyncMiddleware;

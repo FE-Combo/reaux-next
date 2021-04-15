@@ -1,10 +1,8 @@
-import React, { ComponentClass, ComponentType } from "react";
-import { StateView, BaseModel } from "./type";
 import { Helper } from "./helper";
+import React, { ComponentType } from "react";
+import { StateView, BaseModel, StartOptions } from "./type";
 declare const helper: Helper;
-declare function start(Component: ComponentType<any> & {
-    getInitialProps: (context: any) => any;
-}, BaseApp: ComponentClass<any>): ComponentType<any> & {
+declare function start<T>(options: StartOptions<T>): ComponentType<any> & {
     getInitialProps: (context: any) => any;
 };
 declare function register<H extends BaseModel>(handler: H, Component: ComponentType<any>): {
@@ -15,7 +13,7 @@ declare function register<H extends BaseModel>(handler: H, Component: ComponentT
     });
     actions: { readonly [K_1 in { [K in keyof H]: H[K] extends (...args: any[]) => any ? K : never; }[keyof H]]: H[K_1] extends (...args: infer P) => any ? (...args: P) => import("./type").ActionType<P> : never; };
 };
-declare class Model<S> extends BaseModel<S> {
+declare class Model<S = {}> extends BaseModel<S> {
     readonly moduleName: string;
     readonly initState: S;
     constructor(moduleName: string, initState: S);

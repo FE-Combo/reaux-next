@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const createReducer_1 = require("./createReducer");
 let cache;
-let errorCallback = null;
 function createPromiseMiddleware() {
     const middleware = (api) => next => async (actions) => {
         if (!cache.actionHandlers) {
@@ -12,15 +12,18 @@ function createPromiseMiddleware() {
                 await cache.actionHandlers[actions.type](actions.payload);
             }
             catch (error) {
-                errorCallback && errorCallback(error);
+                // TODO: collection error
+                cache.store.dispatch({
+                    type: createReducer_1.createActionType("@error"),
+                    payload: error
+                });
                 console.error(`runtimeError: ${error}`);
             }
         }
         next(actions);
     };
-    middleware.run = function (app, errorCallback) {
+    middleware.run = function (app) {
         cache = app;
-        errorCallback = errorCallback;
     };
     return middleware;
 }

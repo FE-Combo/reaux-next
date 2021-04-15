@@ -1,20 +1,23 @@
-import { Store, Action } from "redux";
+import { ComponentType, ComponentClass } from "react";
+import { Store, Action, ReducersMapObject } from "redux";
 export interface AppCache {
     context?: any;
     actionHandlers: {};
     modules: {};
     store: Store<StateView>;
+    asyncReducers: ReducersMapObject<StateView, any>;
+    injectReducer: (namespace: string, asyncReducers: ReducersMapObject<StateView, any>) => any;
 }
 export interface StateView {
-    app: {};
-    helper: StateViewHelper;
+    [namespace: string]: {};
+    "@error": ErrorState;
+    "@loading": LoadingState;
 }
-export interface StateViewHelper {
-    loading?: StateViewHelperLoadingState;
-    lang?: string;
-    exception?: Exception;
+export interface ErrorState {
+    runtimeException: any;
+    apiException: any;
 }
-export interface StateViewHelperLoadingState {
+export interface LoadingState {
     [loadingType: string]: number;
 }
 export interface ActionType<P = any> extends Action {
@@ -23,12 +26,8 @@ export interface ActionType<P = any> extends Action {
 }
 export interface ActionPayload {
     module: string;
-    state: any;
+    state: object;
 }
-export declare type HelperActionPayload = {
-    identifier: string;
-    hasShow: boolean;
-} | string | Exception;
 export declare abstract class BaseModel<S = {}> {
     abstract readonly moduleName: string;
     abstract readonly initState: S;
@@ -44,4 +43,10 @@ export declare abstract class BaseModel<S = {}> {
 export declare abstract class Exception {
     message: string;
     protected constructor(message: string);
+}
+export interface StartOptions<T> {
+    App: ComponentType<any> & {
+        getInitialProps: (context: any) => any;
+    };
+    BaseApp: ComponentClass<any>;
 }

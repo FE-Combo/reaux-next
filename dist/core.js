@@ -3,37 +3,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = __importDefault(require("react"));
-const react_redux_1 = require("react-redux");
-const redux_logger_1 = require("redux-logger");
-const redux_1 = require("redux");
-const redux_devtools_extension_1 = require("redux-devtools-extension");
-const createView_1 = require("./createView");
-const createAction_1 = require("./createAction");
-const createReducer_1 = require("./createReducer");
-const middleware_1 = require("./middleware");
-const util_1 = require("./util");
-const type_1 = require("./type");
 const helper_1 = require("./helper");
-function createApp() {
+const react_redux_1 = require("react-redux");
+const createView_1 = require("./createView");
+const redux_logger_1 = require("redux-logger");
+const react_1 = __importDefault(require("react"));
+const createAction_1 = require("./createAction");
+const middleware_1 = require("./middleware");
+const redux_devtools_extension_1 = require("redux-devtools-extension");
+const type_1 = require("./type");
+const redux_1 = require("redux");
+const createReducer_1 = require("./createReducer");
+function createAppCache() {
     const cache = {
         actionHandlers: {},
         modules: {},
-        store: redux_1.createStore(createReducer_1.createReducer(), redux_devtools_extension_1.composeWithDevTools({})(redux_1.applyMiddleware(redux_logger_1.createLogger({
+        asyncReducers: {},
+        injectReducer: (namespace, asyncReducer) => {
+            cache.asyncReducers[namespace] = asyncReducer;
+            cache.store.replaceReducer(createReducer_1.createReducer(cache.asyncReducers));
+        },
+        store: redux_1.createStore(createReducer_1.createReducer(), redux_devtools_extension_1.composeWithDevTools({
+            predicate: (state, action) => !/^@@framework\/actionsHandler/.test(action.type)
+        })(redux_1.applyMiddleware(redux_logger_1.createLogger({
             collapsed: true,
-            predicate: (state, action) => action.type !== util_1.INIT_CLIENT_APP &&
-                action.type !== util_1.INIT_CLIENT_HELPER
+            predicate: () => false
         }), middleware_1.asyncMiddleware)))
     };
-    const helper = new helper_1.Helper(cache, (type, payload) => createReducer_1.setHelperAction(type, payload));
-    middleware_1.asyncMiddleware.run(cache, (exception) => {
-        helper.exception = exception;
-    });
-    return { cache, helper };
+    middleware_1.asyncMiddleware.run(cache);
+    return cache;
 }
-const { cache, helper } = createApp();
+const cache = createAppCache();
+const helper = new helper_1.Helper(cache);
 exports.helper = helper;
-function start(Component, BaseApp) {
+function start(options) {
+    const { App: Component, BaseApp } = options;
     return class App extends BaseApp {
         static async getInitialProps(context) {
             cache.context = context;
@@ -49,13 +53,12 @@ function start(Component, BaseApp) {
         }
         constructor(props) {
             super(props);
-            cache.store.dispatch({
-                type: util_1.INIT_CLIENT_APP,
-                payload: props.initialReduxState.app
-            });
-            cache.store.dispatch({
-                type: util_1.INIT_CLIENT_HELPER,
-                payload: props.initialReduxState.helper
+            const namespaces = Object.keys(props.initialReduxState);
+            namespaces.forEach(namespace => {
+                cache.store.dispatch({
+                    type: createReducer_1.createActionType(namespace),
+                    payload: props.initialReduxState[namespace]
+                });
             });
         }
         render() {
@@ -70,8 +73,14 @@ function register(handler, Component) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
     cache.modules[handler.moduleName] = true;
+    // register reducer
+    const currentModuleReducer = createReducer_1.createModuleReducer(handler.moduleName);
+    cache.asyncReducers[handler.moduleName] = currentModuleReducer;
+    cache.store.replaceReducer(createReducer_1.createReducer(cache.asyncReducers));
+    // register actions
     const { actions, actionHandlers } = createAction_1.createAction(handler);
     cache.actionHandlers = { ...cache.actionHandlers, ...actionHandlers };
+    // register view
     const View = createView_1.createView(handler, Component);
     return { View, actions };
 }
@@ -89,16 +98,16 @@ class Model extends type_1.BaseModel {
         return cache.context;
     }
     get state() {
-        return cache.store.getState().app[this.moduleName];
+        return cache.store.getState()[this.moduleName];
     }
     get rootState() {
         return cache.store.getState();
     }
     setState(newState) {
-        cache.store.dispatch(createReducer_1.setStateAction(this.moduleName, newState, util_1.SET_STATE_ACTION));
+        cache.store.dispatch(createReducer_1.setModuleAction(this.moduleName, newState));
     }
     resetState() {
-        cache.store.dispatch(createReducer_1.setStateAction(this.moduleName, this.initState, util_1.SET_STATE_ACTION));
+        cache.store.dispatch(createReducer_1.setModuleAction(this.moduleName, this.initState));
     }
 }
 exports.Model = Model;

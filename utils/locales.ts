@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import EN from "../locales/en.json";
-import ZH from "../locales/zh.json";
+import EN from "../locales/en";
+import ZH from "../locales/zh";
 
 export const locales = {
   EN,

@@ -1,11 +1,10 @@
-import { ComponentType, ComponentClass } from "react";
 import { Store, Action, ReducersMapObject } from "redux";
 
 export interface AppCache {
   context?: any;
   actionHandlers: {};
   modules: {};
-  store: Store<StateView>;
+  store?: Store<StateView>;
   // Add a dictionary to keep track of the registered async reducers
   asyncReducers: ReducersMapObject<StateView, any>;
   // adds the async reducer, and creates a new combined reducer
@@ -63,11 +62,4 @@ export abstract class BaseModel<S = {}> {
 
 export abstract class Exception {
   protected constructor(public message: string) {}
-}
-
-export interface StartOptions<T> {
-  App: ComponentType<any> & {
-    getInitialProps: (context: any) => any;
-  };
-  BaseApp: ComponentClass<any>;
 }

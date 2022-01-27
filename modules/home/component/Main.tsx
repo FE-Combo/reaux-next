@@ -2,7 +2,9 @@ import React from "react";
 import { Button } from "antd";
 import { connect } from "react-redux";
 import { actions } from "../index";
-import { helper } from "../../../framework";
+import { useHelper } from "../../../framework";
+
+const helper = useHelper();
 
 const Index = (props: any) => {
   const { loading, name, dispatch } = props;
@@ -38,7 +40,7 @@ const Index = (props: any) => {
 
 export default connect((state: any) => {
   return {
-    name: state.home.name,
+    name: state?.home?.name,
     loading: helper.isLoading("button")
   };
 })(Index);

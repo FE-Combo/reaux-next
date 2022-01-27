@@ -1,14 +1,8 @@
 import React from "react";
-import { Spin, Icon } from "antd";
 import { connect } from "react-redux";
 import Link from "next/link";
-import { helper } from "../../../framework";
-import * as I18nStore from "dot-i18n/node/i18n-store.js";
-import locales from "../../../locales"
-import "antd/dist/antd.css";
-
-I18nStore.createContext();
-const I18nContext = I18nStore.getContext();
+import { useHelper } from "../../../framework";
+const helper = useHelper();
 
 interface Props {
   isLoading: boolean;
@@ -17,15 +11,13 @@ interface Props {
 }
 
 const Index = (props: Props) => {
-  const { isLoading, Component, pageProps } = props;
+  const { Component, pageProps } = props;
   return (
-    <I18nContext.Provider value={locales.zh}>
-      <Spin
-        spinning={isLoading}
-        indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />}
-      >
-
+    <div>
         <div>
+        <Link href="/">
+            <a style={{ color: "#000", fontSize: 30 }}>/</a>
+          </Link>
           <Link href="/home">
             <a style={{ color: "#000", fontSize: 30 }}>home</a>
           </Link>
@@ -34,9 +26,8 @@ const Index = (props: Props) => {
             <a style={{ color: "#000", fontSize: 30 }}>about</a>
           </Link>
         </div>
-        <Component {...pageProps}></Component>
-      </Spin>
-    </I18nContext.Provider>
+        <Component {...pageProps} />
+    </div>
   );
 };
 

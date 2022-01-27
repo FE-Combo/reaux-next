@@ -1,5 +1,6 @@
 import Main from "./component/Main";
-import { register, Model } from "../../framework";
+import { start, Model } from "../../framework";
+import BaseApp from "next/app";
 import { State } from "./type";
 
 const initialState: State = {
@@ -12,7 +13,8 @@ class ActionHandler extends Model<State> {
   }
 }
 
-export const { actions, View } = register(
+export const { actions, View } = start(
   new ActionHandler("main", initialState),
-  Main
+  Main,
+  BaseApp
 );

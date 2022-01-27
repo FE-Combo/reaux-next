@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseModel } from "./type";
+import { BaseModel} from "./type";
 
 /**
  * Create Component and proxy component lifecycle
@@ -10,14 +10,9 @@ export function createView<H extends BaseModel>(
   handler: H,
   Component: React.ComponentType<any>
 ): React.ComponentType<any> & {
-  getInitialProps: (context: any) => any;
+  getInitialProps?: (context: any) => any;
 } {
   return class View<P extends {} = {}> extends React.PureComponent<P> {
-    static async getInitialProps(context: any) {
-      handler.resetState();
-      return (await handler.onReady()) || {};
-    }
-
     componentDidMount() {
       handler.onLoad();
     }

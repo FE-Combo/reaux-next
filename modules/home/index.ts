@@ -1,8 +1,7 @@
 import Main from "./component/Main";
-import { register, Model, useHelper } from "../../framework";
+import { register, Model, helper } from "../../framework";
 import { State } from "./type";
 
-const helper = useHelper();
 
 const initialState: State = {
   name: "home"

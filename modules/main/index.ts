@@ -9,6 +9,7 @@ const initialState: State = {
 
 class ActionHandler extends Model<State> {
   async onReady() {
+    
     console.info("main");
   }
 }

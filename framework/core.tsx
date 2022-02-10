@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
 import React, { ComponentType, ComponentClass } from "react";
 import { createAction } from "./createAction";
-import { asyncMiddleware } from "./middleware";
+import { middleware } from "./middleware";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { StateView, BaseModel, AppCache } from "./type";
 import { createStore, applyMiddleware, ReducersMapObject } from "redux";
@@ -23,7 +23,6 @@ const inServer = isServer();
 function createAppCache(): AppCache {
   const cache = {
     actionHandlers: {},
-    modules: {},
     asyncReducers: {} as ReducersMapObject<StateView, any>,
     injectReducer: (namespace, asyncReducer) => {
       cache.asyncReducers[namespace] = asyncReducer;
@@ -40,17 +39,17 @@ function createAppCache(): AppCache {
             collapsed: true,
             predicate: () => false
           }),
-          asyncMiddleware
+          middleware(() => cache.actionHandlers)
         )
       )
     )
   };
-  asyncMiddleware.run(cache);
   return cache;
 }
 
 let cache = inServer ? null : createAppCache();
-let useHelper = () => new Helper(cache);
+
+const helper = new Helper(cache);
 
 function start<H extends BaseModel>(
   handler: H,
@@ -86,13 +85,6 @@ function register<H extends BaseModel>(
 
 //client inject is executed at the beginning, server register in getInitialProps. because getInitialProps cannot continue to be executed on the client after the server is executed
 function modelInject<H extends BaseModel>(handler: H, actionHandlers: AppCache["actionHandlers"]){
-  if (cache.modules.hasOwnProperty(handler.moduleName)) {
-    throw new Error(
-      `module is already registered, module=${handler.moduleName}`
-    );
-  }
-  cache.modules[handler.moduleName] = true;
-
   // register reducer
   const currentModuleReducer = createModuleReducer(handler.moduleName);
   cache.asyncReducers[handler.moduleName] = currentModuleReducer;
@@ -171,4 +163,4 @@ class Model<S = {}> extends BaseModel<S> {
   }
 }
 
-export { start, register, Model, useHelper };
+export { start, register, Model, helper };

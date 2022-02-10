@@ -1,16 +1,10 @@
-import { ActionType } from "./type";
+import {ActionHandlers, ActionType} from "./type"
 
-type ActionCreators<H> = {
-  readonly [K in {
-    [K in keyof H]: H[K] extends (...args: any[]) => any ? K : never;
-  }[keyof H]]: H[K] extends (...args: infer P) => any
-    ? (...args: P) => ActionType<P>
-    : never;
-};
 
-interface ActionHandlers {
-  [key: string]: (...args: any[]) => any;
-}
+type ActionCreator<H> = H extends (...args: infer P) => any ? (...args: P) => ActionType<P> : never;
+
+type ActionCreators<H> = {readonly [K in keyof H]: ActionCreator<H[K]>};
+
 
 function createActionHandlerType(
   moduleName: string,

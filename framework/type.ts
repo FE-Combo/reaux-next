@@ -2,8 +2,7 @@ import { Store, Action, ReducersMapObject } from "redux";
 
 export interface AppCache {
   context?: any;
-  actionHandlers: {};
-  modules: {};
+  actionHandlers: ActionHandlers;
   store?: Store<StateView>;
   // Add a dictionary to keep track of the registered async reducers
   asyncReducers: ReducersMapObject<StateView, any>;
@@ -12,6 +11,10 @@ export interface AppCache {
     namespace: string,
     asyncReducers: ReducersMapObject<StateView, any>
   ) => any;
+}
+
+export interface ActionHandlers {
+  [key: string]: (...args: any[]) => any;
 }
 
 export interface StateView {

@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Link from "next/link";
-import { useHelper } from "../../../framework";
-const helper = useHelper();
+import { helper } from "../../../framework";
 
 interface Props {
   isLoading: boolean;

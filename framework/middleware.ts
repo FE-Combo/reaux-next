@@ -1,28 +1,18 @@
 import { Middleware, MiddlewareAPI } from "redux";
 import { createActionType } from "./createReducer";
-import { AppCache } from "./type";
+import { ActionType, ActionHandlers } from "./type";
 
-interface AsyncMiddleware extends Middleware {
-  run: (app: AppCache) => void;
-}
-
-let cache: AppCache;
-
-export function createPromiseMiddleware(): AsyncMiddleware {
-  const middleware: AsyncMiddleware = (
+export function middleware(callback: ()=> ActionHandlers): Middleware {
+  const middleware: Middleware = (
     api: MiddlewareAPI
-  ) => next => async actions => {
-    if (!cache.actionHandlers) {
-      throw new Error(
-        "Invoking action before execute async middleware.run function only!!"
-      );
-    }
-    if (cache.actionHandlers[actions.type]) {
+  ) => next => async (actions: ActionType) => {
+    const actionHandlers = callback();
+    if (actionHandlers[actions.type]) {
       try {
-        await cache.actionHandlers[actions.type](actions.payload);
+        await actionHandlers[actions.type](...actions.payload);
       } catch (error) {
         // TODO: collection error
-        cache.store.dispatch({
+        api.dispatch({
           type: createActionType("@error"),
           payload: error
         });
@@ -32,10 +22,6 @@ export function createPromiseMiddleware(): AsyncMiddleware {
     next(actions);
   };
 
-  middleware.run = function(app: AppCache): any {
-    cache = app;
-  };
   return middleware;
 }
 
-export const asyncMiddleware: AsyncMiddleware = createPromiseMiddleware();

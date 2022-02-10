@@ -2,13 +2,10 @@ import React from "react";
 import { Button } from "antd";
 import { connect } from "react-redux";
 import { actions } from "../index";
-import { useHelper } from "../../../framework";
-
-const helper = useHelper();
+import { helper } from "../../../framework";
 
 const Index = (props: any) => {
   const { loading, name, dispatch } = props;
-
   const handleButtonClick = () => dispatch(actions.clickButton());
   const handleGlobalButtonClick = () => dispatch(actions.clickGlobalButton());
   const changeLang = (lang: string) => {

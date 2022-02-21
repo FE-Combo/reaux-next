@@ -10,7 +10,7 @@ export class Helper {
   }
 
   private put<T extends AnyAction>(action: T) {
-    if(!isServer()) {
+    if(!isServer) {
       this.appCache.store.dispatch(action);
     }
   }
@@ -18,7 +18,7 @@ export class Helper {
   loading(identifier: string = "global") {
     const that = this;
     return handlerDecorator(async function(handler) {
-      if(!isServer()) {
+      if(!isServer) {
         try {
           const nextLoadingState = that.appCache.store.getState()["@loading"];
           nextLoadingState[identifier] = nextLoadingState[identifier] + 1 || 1;
@@ -36,7 +36,7 @@ export class Helper {
   }
 
   isLoading(identifier: string = "global"): boolean {
-    if(!isServer()) {
+    if(!isServer) {
       const loading = this.appCache.store.getState()["@loading"];
       return !!(loading && loading[identifier] > 0);
     }

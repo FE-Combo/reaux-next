@@ -29,5 +29,4 @@ export function handlerDecorator<S extends StateView>(
   };
 }
 
-export const isServer = () =>
-  process && typeof process === "object" && typeof window === "undefined";
+export const isServer = process && typeof process === "object" && typeof window === "undefined";

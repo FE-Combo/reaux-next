@@ -1,5 +1,6 @@
 import React from "react";
 import { BaseModel} from "./type";
+import {AppContext} from "next/dist/pages/_app";
 
 /**
  * Create Component and proxy component lifecycle
@@ -10,7 +11,7 @@ export function createView<H extends BaseModel>(
   handler: H,
   Component: React.ComponentType<any>
 ): React.ComponentType<any> & {
-  getInitialProps?: (context: any) => any;
+  getInitialProps?: (context: AppContext) => any;
 } {
   return class View<P extends {} = {}> extends React.PureComponent<P> {
     componentDidMount() {

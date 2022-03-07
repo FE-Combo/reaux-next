@@ -18,7 +18,9 @@ import {isServer} from "./util"
 import chalk from "chalk";
 import {AppContext} from "next/dist/pages/_app";
 
-// TODO: 
+const isProd = process.env.NODE_ENV === "production";
+
+// TODO: Dynamic and static separation
 function createAppCache(): AppCache {
   const cache = {
     actionHandlers: {},
@@ -73,7 +75,9 @@ function register<H extends BaseModel>(
   const View = createView(handler, Component)
   View.getInitialProps = async ()=> {
     if(isServer) {
-      console.info(`${chalk.green("ready")} - ${handler.moduleName} getInitialProps successfully`)
+      if(!isProd) {
+        console.info(`${chalk.green("ready")} - ${handler.moduleName} getInitialProps successfully`)
+      }
       modelInject(handler, actionHandlers);
     }
     return (await handler.onReady()) || {};
@@ -82,7 +86,7 @@ function register<H extends BaseModel>(
   return { View, actions };
 }
 
-//client inject is executed at the beginning, server register in getInitialProps. because getInitialProps cannot continue to be executed on the client after the server is executed
+// client inject is executed at the beginning, server register in getInitialProps. because getInitialProps cannot continue to be executed on the client after the server is executed
 function modelInject<H extends BaseModel>(handler: H, actionHandlers: AppCache["actionHandlers"]){
   // register reducer
   const currentModuleReducer = createModuleReducer(handler.moduleName);
@@ -104,7 +108,9 @@ function createApp(
   return class App extends BaseApp {
     static async getInitialProps(context: AppContext) {
       if(isServer) {
-        console.info(`${chalk.green("ready")} - NextApp getInitialProps successfully`)
+        if(!isProd) {
+          console.info(`${chalk.green("ready")} - NextApp getInitialProps successfully`)
+        }
         // It will only be executed on the server side, not on the client side
         cache = createAppCache()
         cache.context = context;

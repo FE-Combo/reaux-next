@@ -1,23 +1,29 @@
 import React from "react";
 import { Button } from "antd";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { actions } from "../index";
-import { helper } from "../../../framework";
+import {AllState} from "../../../utils/state"
 
-const Index = (props: any) => {
-  const { loading, name, dispatch } = props;
+const Index = () => {
+  console.log(111)
+  const dispatch = useDispatch();
+  const {name, loading } = useSelector((state: AllState)=>({
+    name: state.home.name,
+    loading: state["@loading"].button,
+  }))
   const handleButtonClick = () => dispatch(actions.clickButton());
   const handleGlobalButtonClick = () => dispatch(actions.clickGlobalButton());
   const changeLang = (lang: string) => {
     //
   };
+
   return (
     <>
       <div>
         <span>{name}</span>
         &nbsp;&nbsp;
         <i18n>名字</i18n>
-        <Button onClick={handleButtonClick} loading={loading}>
+        <Button onClick={handleButtonClick} loading={!!loading}>
           局部加载
         </Button>
         &nbsp;&nbsp;
@@ -35,9 +41,4 @@ const Index = (props: any) => {
   );
 };
 
-export default connect((state: any) => {
-  return {
-    name: state?.home?.name,
-    loading: helper.isLoading("button")
-  };
-})(Index);
+export default Index

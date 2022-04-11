@@ -11,12 +11,11 @@ export function middleware(callback: ()=> ActionHandlers): Middleware {
       try {
         await actionHandlers[actions.type](...actions.payload);
       } catch (error) {
-        // TODO: collection error
         api.dispatch({
           type: createActionType("@error"),
           payload: error
         });
-        console.error(`runtimeError: ${error}`);
+        console.error(`middlewareError: ${error}`);
       }
     }
     next(actions);

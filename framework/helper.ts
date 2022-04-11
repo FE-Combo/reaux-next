@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { handlerDecorator, isServer} from "./util";
 import { AppCache } from "./type";
-import { setModuleAction } from "./createReducer";
+import { setModuleAction, createActionType } from "./createReducer";
 
 export class Helper {
   appCache: AppCache;
@@ -24,6 +24,12 @@ export class Helper {
           nextLoadingState[identifier] = nextLoadingState[identifier] + 1 || 1;
           that.put(setModuleAction("@loading", nextLoadingState));
           await handler();
+        } catch(error) {
+          that.appCache.store.dispatch({
+            type: createActionType("@error"),
+            payload: error
+          });
+          console.error(`helperError: ${error}`);
         } finally {
           const nextLoadingState = that.appCache.store.getState()["@loading"];
           nextLoadingState[identifier] = nextLoadingState[identifier] - 1 || 0;

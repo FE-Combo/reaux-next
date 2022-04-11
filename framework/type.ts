@@ -3,7 +3,7 @@ import { Store, Action, ReducersMapObject } from "redux";
 export interface AppCache {
   context?: any;
   actionHandlers: ActionHandlers;
-  store?: Store<StateView>;
+  store?: Store<any>;
   // Add a dictionary to keep track of the registered async reducers
   asyncReducers: ReducersMapObject<StateView, any>;
   // adds the async reducer, and creates a new combined reducer
@@ -18,9 +18,9 @@ export interface ActionHandlers {
 }
 
 export interface StateView {
-  [namespace: string]: {};
+  [namespace: string]: any;
   "@error": ErrorState;
-  "@loading": LoadingState;
+  "@loading": Partial<LoadingState>;
 }
 
 export interface ErrorState {
@@ -42,11 +42,11 @@ export interface ActionPayload {
   state: object;
 }
 
-export abstract class BaseModel<S = {}> {
+export abstract class BaseModel<S = {}, R = any> {
   abstract readonly moduleName: string;
   abstract readonly initState: S;
   abstract state: Readonly<S>;
-  abstract rootState: Readonly<StateView>;
+  abstract rootState: Readonly<R>;
   abstract setState(newState: Partial<S>): void;
   abstract resetState(): void;
   async onReady(): Promise<any> {

@@ -58,6 +58,9 @@ export const { actions, View } = register(new ActionHandler(namespace, initialSt
 - services：API
 - utils：工具库
 
+## Attentions
+- tsconfig.json target must be `"target": "esnext"`. otherwise, `start` is not executed in client
+
 ## DEMO
 
 - yarn dev

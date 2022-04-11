@@ -32,6 +32,7 @@ class ActionHandler extends Model<State> {
   async clickGlobalButton() {
     await helper.delay(1000);
     this.setState({ name: "click global button" });
+    await helper.delay(1000);
     this.setState({ name: "click global button2" });
   }
 

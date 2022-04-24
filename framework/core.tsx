@@ -114,6 +114,8 @@ function createApp(
         }
         // It will only be executed on the server side, not on the client side
         cache = createAppCache()
+
+        // TODO: 不要缓存context，直接传入onReady中，根据需要存储需要的字段即可
         cache.context = context;
       }
 

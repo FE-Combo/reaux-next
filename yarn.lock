@@ -212,6 +212,13 @@
   resolved "https://registry.npmmirror.com/@next/swc-win32-x64-msvc/download/@next/swc-win32-x64-msvc-12.0.9.tgz#f7d3b59000082cf65c84fdc61930b708aa5446e5"
   integrity sha512-1c/sxp/4Qz4F6rCxiYqAnrmghCOFt5hHZ9Kd+rXFW5Mqev4C4XDOUMHdBH55HgnJZqngYhOE0r/XNkCtsIojig==
 
+"@types/axios@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
+  integrity sha1-7CMA++fX3d1+udOr+HmZlkyvzkY=
+  dependencies:
+    axios "*"
+
 "@types/glob@*":
   version "7.2.0"
   resolved "https://registry.npmmirror.com/@types/glob/download/@types/glob-7.2.0.tgz?cache=0&sync_timestamp=1637265668380&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fglob%2Fdownload%2F%40types%2Fglob-7.2.0.tgz#bc1b5bf3aa92f25bd5dd39f35c57361bdce5b2eb"
@@ -227,6 +234,11 @@
   dependencies:
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
+
+"@types/js-cookie@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/@types/js-cookie/-/js-cookie-3.0.1.tgz#04aa743e2e0a85a22ee9aa61f6591a8bc19b5d68"
+  integrity sha512-7wg/8gfHltklehP+oyJnZrz9XBuX5ZPP4zB6UsI84utdlkRYLnOm2HfpLXazTwZA+fpGn0ir8tGNgVnMEleBGQ==
 
 "@types/minimatch@*":
   version "3.0.5"
@@ -463,6 +475,13 @@ at-least-node@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmmirror.com/at-least-node/download/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha1-YCzUtG6EStTv/JKoARo8RuAjjcI=
+
+axios@*, axios@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.npmjs.org/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
+  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
+  dependencies:
+    follow-redirects "^1.14.8"
 
 babel-runtime@6.x, babel-runtime@^6.23.0, babel-runtime@^6.26.0:
   version "6.26.0"
@@ -1121,6 +1140,11 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
+follow-redirects@^1.14.8:
+  version "1.14.9"
+  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
+  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
+
 frac@0.3.1:
   version "0.3.1"
   resolved "https://registry.nlark.com/frac/download/frac-0.3.1.tgz#577677b7fdcbe6faf7c461f1801d34137cda4354"
@@ -1398,6 +1422,11 @@ isomorphic-fetch@^2.1.1:
   dependencies:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
+
+js-cookies@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/js-cookies/-/js-cookies-1.0.4.tgz#d46e576c420ff6d5542c0f52b6d4ef7d637e754e"
+  integrity sha1-1G5XbEIP9tVULA9SttTvfWN+dU4=
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

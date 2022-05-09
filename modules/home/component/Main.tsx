@@ -5,7 +5,6 @@ import { actions } from "../index";
 import {AllState} from "../../../utils/state"
 
 const Index = () => {
-  console.log(111)
   const dispatch = useDispatch();
   const {name, loading } = useSelector((state: AllState)=>({
     name: state.home.name,

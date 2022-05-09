@@ -32,7 +32,9 @@
 
 - Model：生成model的父类
     - onReady: 相当于getInitialProps
+        - 通过添加装饰器`@helper.onServer()/@helper。onClient()`指定在服务端或客户端执行。如果有返回值建议服务端与客户端都执行该声明周期。
     - onLoad: 相当于componentDidMount
+    - onUpdate: 相当于componentDidMount
     - onUnLoad: 相当于componentWillUnmount
     - onShow: 当前模块在viewport中触发（客户端执行）
     - onHide: 当前模块不在viewport中触发（客户端执行）
@@ -50,7 +52,7 @@
 - utils：工具库
 
 ## Attentions
-- tsconfig.json target must be `"esnext"` & lib must within `"next"`, otherwise cause by: 
+- tsconfig.json target must be `"esnext"` & lib must within `"esnext"`, otherwise cause by: 
     - `@loading`can't be monitor in useSelector
     - function `start` is not executed in client
 
@@ -76,5 +78,8 @@
 - Q: 如何接入sentry？
     直接使用官方指定的sentry/nextjs即可（ref：https://docs.sentry.io/platforms/javascript/guides/nextjs/#configure），但不支持使用custom server
 
-- Q: 不同模块之前是否可以互相修改state
+- Q: 不同模块之前是否可以互相修改state？
     如果模块中暴露了对应的action则可以，否则不可以
+
+- Q: 为什么onReady（getInitialProps）中在客户端执行时不能使用window.location对象？
+    onReady在客户端触发就必须从第一个页面导航到第二个页面。此时第二个页面的location值是与第一个页面的一样，若需要使用location相关的值可以直接使用onReady参数。

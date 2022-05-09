@@ -41,6 +41,28 @@ export class Helper {
     });
   }
 
+  inServer() {
+    return (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<any>) => {
+      if(typeof descriptor.value.executionEnv === "number") {
+        descriptor.value.executionEnv ++
+      } else {
+        descriptor.value.executionEnv = 1;
+      }
+      return descriptor
+    }
+  }
+
+  inClient() {
+    return (target, name, descriptor) => {
+      if(typeof descriptor.value.executionEnv === "number") {
+        descriptor.value.executionEnv --
+      } else {
+        descriptor.value.executionEnv = -1;
+      }
+      return descriptor
+    }
+  }
+
   isLoading(identifier: string = "global"): boolean {
     if(!isServer) {
       const loading = this.appCache.store.getState()["@loading"];

@@ -6,7 +6,7 @@ import { createAction } from "./createAction";
 import { middleware } from "./middleware";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { StateView, BaseModel, AppCache } from "./type";
-import { createStore, applyMiddleware, ReducersMapObject } from "redux";
+import { createStore, applyMiddleware, ReducersMapObject, AnyAction } from "redux";
 import {createView} from "./createView";
 import {
   createActionType,
@@ -55,7 +55,7 @@ const helper = new Helper(cache);
 function start<H extends BaseModel>(
   handler: H,
   Component: ComponentType<any> & {getInitialProps?: (context: AppContext) => any},
-  BaseApp: ComponentClass
+  BaseApp: ComponentClass,
 ) {
   const {View, actions} = register(handler, Component);
   const App = createApp(View, BaseApp);
@@ -72,15 +72,30 @@ function register<H extends BaseModel>(
   if(!isServer) {
     modelInject(handler, actionHandlers);
   }
-  const View = createView(handler, Component)
-  View.getInitialProps = async ()=> {
+  const View = createView(handler, Component);
+  View.getInitialProps = async (context: AppContext)=> {
     if(isServer) {
       if(!isProd) {
         console.info(`${chalk.green("ready")} - ${handler.moduleName} getInitialProps successfully`)
       }
       modelInject(handler, actionHandlers);
     }
-    return (await handler.onReady()) || {};
+
+    const onReady = handler.onReady as any;
+    if((!!onReady.inServer && !!onReady.inClient) || (!onReady.inServer && !onReady.inClient)) {
+       // execute in server and client
+       return (await handler.onReady(context)) || {};
+    } else {
+      if(!!onReady.inServer && isServer) {
+        // execute only in server
+        return (await handler.onReady(context)) || {};
+      } else if (!!onReady.inClient && !isServer) {
+        // execute only in client
+        return (await handler.onReady(context)) || {};
+      } else {
+        return {};
+      }
+    }   
   }
 
   return { View, actions };
@@ -114,9 +129,6 @@ function createApp(
         }
         // It will only be executed on the server side, not on the client side
         cache = createAppCache()
-
-        // TODO: 不要缓存context，直接传入onReady中，根据需要存储需要的字段即可
-        cache.context = context;
       }
 
       const appProps =
@@ -160,9 +172,6 @@ class Model<S = {}, R = StateView> extends BaseModel<S, R> {
   public constructor(readonly moduleName: string, readonly initState: S) {
     super();
   }
-  get context(): Readonly<AppContext> {
-    return cache.context;
-  }
   get state(): Readonly<S> {
     return cache.store.getState()[this.moduleName] as S;
   }
@@ -174,6 +183,9 @@ class Model<S = {}, R = StateView> extends BaseModel<S, R> {
   }
   resetState() {
     cache.store.dispatch(setModuleAction(this.moduleName, this.initState));
+  }
+  dispatch(action: AnyAction) {
+    cache.store.dispatch(action);
   }
 }
 

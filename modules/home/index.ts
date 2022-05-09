@@ -16,7 +16,7 @@ class ActionHandler extends Model<State> {
   }
 
   async onLoad() {
-    // mount or update
+    // mount
   }
   async onUnload() {
     // unmount
@@ -37,7 +37,6 @@ class ActionHandler extends Model<State> {
   }
 
   async text() {
-    console.info(`next context: ${this.context}`); // 获取next context
     console.info(`model state: ${this.state}`); // 当前模块的state
     console.info(`root state: ${this.rootState}`); // 整个项目的state
     this.setState({ name: "name" }); // 更新 model state

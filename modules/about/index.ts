@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import { register, Model } from "../../framework";
+import { register, Model, PageContext, helper} from "../../framework";
 import { State } from "./type";
 
 const initialState: State = {
@@ -7,8 +7,9 @@ const initialState: State = {
 };
 
 class ActionHandler extends Model<State> {
-  async onReady() {
-    console.info("about");
+  @helper.inServer()
+  async onReady(context: PageContext) {
+    console.info("about: only in server");
   }
 }
 

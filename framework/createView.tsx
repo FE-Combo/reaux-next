@@ -19,7 +19,7 @@ export function createView<H extends BaseModel>(
     }
 
     componentDidUpdate() {
-      handler.onLoad();
+      handler.onUpdate();
     }
 
     componentWillUnmount() {

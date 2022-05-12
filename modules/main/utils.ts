@@ -2,15 +2,14 @@ import { isServer } from '../../framework';
 import axios from "axios";
 import cookie from 'js-cookie';
 import Router from "next/router";
-import {AppContext} from "next/dist/pages/_app";
-import {NextApiRequest} from "next";
+import {NextPageContext, NextApiRequest} from "next";
 
 const LOGIN_PATH = "/login"
 
-export function ajaxInterceptorsInServer(context: AppContext) {
+export function ajaxInterceptorsInServer(context: NextPageContext) {
     if(isServer) {
         axios.defaults.baseURL = `http://localhost:${process.env.PORT || 3000}`;
-        const req = context?.ctx?.req as NextApiRequest;
+        const req = context?.req as NextApiRequest;
         axios.interceptors.request.use(
           function (config) {
             // 避免多次注册多次执行
@@ -51,7 +50,7 @@ export function ajaxInterceptorsInServer(context: AppContext) {
     
         axios.interceptors.response.use(function(response){
           if(response.data.code === "SID_INVALID") {
-            const res = context.ctx.res;
+            const res = context.res;
             if(res) {
                 try {
                     res.setHeader('Location', LOGIN_PATH);

@@ -1,10 +1,11 @@
 import {ActionHandlers, ActionType} from "./type"
 
-
 type ActionCreator<H> = H extends (...args: infer P) => any ? (...args: P) => ActionType<P> : never;
 
 type ActionCreators<H> = {readonly [K in keyof H]: ActionCreator<H[K]>};
 
+const buildinKeys = ["constructor", "dispatch", "setState", "rootState", "state", "resetState", "initState", "moduleName"]  as const;
+type BuildinActionKeys = {readonly [K in keyof typeof buildinKeys]: typeof buildinKeys[K]}[number];
 
 function createActionHandlerType(
   moduleName: string,
@@ -21,8 +22,8 @@ export function createAction<H extends object & { moduleName: string }>(
   handler: H
 ) {
   const moduleName = handler.moduleName;
-  const keys = getPrototypeOfExceptConstructor(handler);
-  const actions = {} as ActionCreators<H>;
+  const keys = getPrototypeOfExceptBuildinKeys(handler);
+  const actions = {} as Omit<ActionCreators<H>, BuildinActionKeys>;
   const actionHandlers = {} as ActionHandlers;
   keys.forEach(actionType => {
     const method = handler[actionType];
@@ -37,8 +38,8 @@ export function createAction<H extends object & { moduleName: string }>(
   return { actions, actionHandlers };
 }
 
-function getPrototypeOfExceptConstructor(object: object): string[] {
+function getPrototypeOfExceptBuildinKeys(object: object): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter(
-    key => key !== "constructor"
+    key => !buildinKeys.includes(key as BuildinActionKeys)
   );
 }

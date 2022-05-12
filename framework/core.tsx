@@ -17,6 +17,7 @@ import {
 import {isServer} from "./util"
 import chalk from "chalk";
 import {AppContext} from "next/dist/pages/_app";
+import { NextPageContext } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -54,10 +55,11 @@ const helper = new Helper(cache);
 
 function start<H extends BaseModel>(
   handler: H,
-  Component: ComponentType<any> & {getInitialProps?: (context: AppContext) => any},
+  Component: ComponentType<any> & {getInitialProps?: (context: NextPageContext) => any},
   BaseApp: ComponentClass,
 ) {
   const {View, actions} = register(handler, Component);
+  // Upgrade submodule to top level module
   const App = createApp(View, BaseApp);
   return {View: App, actions}
 }
@@ -68,12 +70,12 @@ function register<H extends BaseModel>(
 ) {
   // create actions&handlers
   const { actions, actionHandlers } = createAction(handler);
-  
   if(!isServer) {
     modelInject(handler, actionHandlers);
   }
+
   const View = createView(handler, Component);
-  View.getInitialProps = async (context: AppContext)=> {
+  View.getInitialProps = async (context: NextPageContext)=> {
     if(isServer) {
       if(!isProd) {
         console.info(`${chalk.green("ready")} - ${handler.moduleName} getInitialProps successfully`)
@@ -83,8 +85,8 @@ function register<H extends BaseModel>(
 
     const onReady = handler.onReady as any;
     if((!!onReady.inServer && !!onReady.inClient) || (!onReady.inServer && !onReady.inClient)) {
-       // execute in server and client
-       return (await handler.onReady(context)) || {};
+      // execute in server and client
+      return (await handler.onReady(context)) || {};
     } else {
       if(!!onReady.inServer && isServer) {
         // execute only in server
@@ -92,10 +94,9 @@ function register<H extends BaseModel>(
       } else if (!!onReady.inClient && !isServer) {
         // execute only in client
         return (await handler.onReady(context)) || {};
-      } else {
-        return {};
-      }
-    }   
+      } 
+      return {};
+    } 
   }
 
   return { View, actions };
@@ -113,11 +114,12 @@ function modelInject<H extends BaseModel>(handler: H, actionHandlers: AppCache["
   cache.actionHandlers = { ...cache.actionHandlers, ...actionHandlers };
 
   // create custom state in model
-  handler.resetState();
+  handler.resetState()
 }
 
+// Reister top level module
 function createApp(
-  View: ComponentType<any> & {getInitialProps?: (context: AppContext) => any},
+  View: ComponentType<any> & {getInitialProps?: (context: NextPageContext) => any},
   BaseApp: ComponentClass
 ) {
   return class App extends BaseApp {
@@ -133,7 +135,7 @@ function createApp(
 
       const appProps =
         typeof View.getInitialProps === "function"
-          ? await View.getInitialProps(context)
+          ? await View.getInitialProps(context.ctx)
           : {};
       const superProps = await super["getInitialProps"](context);
       return {

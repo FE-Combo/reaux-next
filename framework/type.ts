@@ -1,5 +1,5 @@
-import { Store, Action, ReducersMapObject } from "redux";
-import { AppContext } from "next/dist/pages/_app";
+import { Store, Action, ReducersMapObject, AnyAction } from "redux";
+import { NextPageContext } from "next";
 
 export interface AppCache {
   actionHandlers: ActionHandlers;
@@ -49,9 +49,10 @@ export abstract class BaseModel<S = {}, R = any> {
   abstract rootState: Readonly<R>;
   abstract setState(newState: Partial<S>): void;
   abstract resetState(): void;
-  async onReady(_context?: AppContext): Promise<any> {
+  abstract dispatch(action: AnyAction): void;
+  async onReady(_context?: NextPageContext): Promise<any> {
     // Extends to be overrode
-    // Execute on the server or execute on the client before module render
+    // Execute on the server or client before module render
     // Similar to getInitialProps in nextjs
   }
   async onLoad(): Promise<any> {
@@ -87,4 +88,5 @@ export interface StartOptons {
   withEffect: boolean; // 是否生成副作用函数
 }
 
-export type PageContext = AppContext;
+
+export type PageContext = NextPageContext;

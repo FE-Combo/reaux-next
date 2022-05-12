@@ -41,6 +41,7 @@ class ActionHandler extends Model<State> {
     console.info(`root state: ${this.rootState}`); // 整个项目的state
     this.setState({ name: "name" }); // 更新 model state
     this.resetState(); // 重置当前model的state
+    this.dispatch({type: "test", payload: {}}); // dispatch
   }
 }
 

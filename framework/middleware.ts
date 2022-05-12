@@ -13,9 +13,12 @@ export function middleware(callback: ()=> ActionHandlers): Middleware {
       } catch (error) {
         api.dispatch({
           type: createActionType("@error"),
-          payload: error
+          payload: {
+            name: error.name,
+            message: error.message,
+            stack: error?.stack
+          }
         });
-        console.error(`middlewareError: ${error}`);
       }
     }
     next(actions);

@@ -1,5 +1,6 @@
 import Main from "./component/Main";
-import { register, Model, PageContext, helper} from "../../framework";
+import { register, Model, helper} from "../../framework";
+import { NextPageContext } from "next";
 import { State } from "./type";
 
 const initialState: State = {
@@ -8,7 +9,7 @@ const initialState: State = {
 
 class ActionHandler extends Model<State> {
   @helper.inServer()
-  async onReady(context: PageContext) {
+  async onReady(context: NextPageContext) {
     console.info("about: only in server");
   }
 }

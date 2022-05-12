@@ -3,7 +3,10 @@ import { StateView } from "./type";
 declare const process: any;
 declare const window: any;
 
-type ActionHandler = (...args: any[]) => any;
+type ActionHandler = ((...args: any[]) => any) & {
+  inServer?: boolean;
+  inClient?: boolean;
+};
 
 type HandlerDecorator = (
   target: object,
@@ -16,8 +19,13 @@ type HandlerInterceptor<S> = (
   state: Readonly<S>
 ) => any;
 
+interface Options<S> {
+  callback: (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>)=>void
+}
+
 export function handlerDecorator<S extends StateView>(
-  interceptor: HandlerInterceptor<S>
+  interceptor: HandlerInterceptor<S>,
+  options?: Options<S>
 ): HandlerDecorator {
   return (target, name, descriptor) => {
     const fn = descriptor.value;
@@ -25,6 +33,9 @@ export function handlerDecorator<S extends StateView>(
       const rootState: S = (target as any).rootState;
       await interceptor(fn!.bind(this, ...args), rootState);
     };
+    if(typeof options?.callback === "function") {
+      options.callback(target, name, descriptor);
+    }
     return descriptor;
   };
 }

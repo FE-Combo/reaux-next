@@ -24,7 +24,7 @@
 - helper：帮助函数
     - delay: 睡眠
     - inServer: 装饰器，应用于`onReady`,指定该生命周期执行于服务端
-    - inServer: 装饰器，应用于`onReady`,指定该生命周期执行于客户端
+    - inClient: 装饰器，应用于`onReady`,指定该生命周期执行于客户端
     - loading: 装饰器，统一管理loading状态，执行于客户端
     - isLoading: 判断是否处于loading状态，执行于客户端
 
@@ -94,3 +94,7 @@
 
 - Q: module与page有什么区别？
     page是路由页面，moudle是模块。一个页面必须是一个模块，但是一个模块不一定是一个页面。
+
+- Q: 相较于dva有什么优势？
+    - 按需加载
+    - 更加健全的ts校验

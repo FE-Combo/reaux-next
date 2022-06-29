@@ -10,14 +10,39 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "output": "rm -rf dist && tsc -p config/tsconfig.build.json",
+    "build:lib": "rm -rf dist && tsc -p config/tsconfig.build.json",
     "locales": "node ./node_modules/dot-i18n/node/createLocale",
+    "eslint": "eslint . --fix",
+    "prettier": "prettier --write .",
+    "type-check": "tsc --pretty --noEmit",
     "release": "standard-version",
     "release:beta": "standard-version --prerelease beta",
     "release:alpha": "standard-version --prerelease alpha",
     "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.@(tsx|ts)": [
+      "yarn eslint",
+      "yarn prettier",
+      "git add"
+    ],
+    "*.@(js|json)": [
+      "yarn prettier",
+      "git add"
+    ],
+    "*.@(scss)": [
+      "yarn stylelint",
+      "yarn prettier",
+      "git add"
+    ]
   },
   "files": [
     "dist",
@@ -31,22 +56,30 @@
     "@types/js-cookie": "^3.0.1",
     "@types/node": "^17.0.10",
     "@types/react": "^16.14.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
     "antd": "^3.26.20",
     "axios": "^0.26.1",
     "dot-i18n": "^0.0.7",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.1",
     "js-cookies": "^1.0.4",
+    "lint-staged": "^13.0.3",
     "next": "^12.0.7",
+    "prettier": "^2.7.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "standard-version": "^9.3.2",
     "ts-node": "8.3.0",
-    "tslint": "5.18.0",
-    "tslint-react": "4.0.0",
     "typescript": "^4.5.4"
   },
   "dependencies": {
     "@types/react-redux": "^7.1.16",
     "@types/redux-logger": "^3.0.8",
+    "connected-next-router": "^4.1.1",
     "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",

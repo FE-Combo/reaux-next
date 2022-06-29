@@ -1,10 +1,10 @@
-import { createContext, useContext } from "react";
-import EN from "../locales/en";
-import ZH from "../locales/zh";
+import { createContext, useContext } from 'react';
+import EN from '../locales/en';
+import ZH from '../locales/zh';
 
 export const locales = {
   EN,
-  ZH
+  ZH,
 };
 
 const initLocales: typeof ZH | null = null;

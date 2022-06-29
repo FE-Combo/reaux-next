@@ -1,5 +1,5 @@
-import { Store, Action, ReducersMapObject, AnyAction } from "redux";
-import { NextPageContext } from "next";
+import { Store, Action, ReducersMapObject, AnyAction } from 'redux';
+import { NextPageContext } from 'next';
 
 export interface AppCache {
   actionHandlers: ActionHandlers;
@@ -9,7 +9,7 @@ export interface AppCache {
   // adds the async reducer, and creates a new combined reducer
   injectReducer: (
     namespace: string,
-    asyncReducers: ReducersMapObject<StateView, any>
+    asyncReducers: ReducersMapObject<StateView, any>,
   ) => any;
 }
 
@@ -19,8 +19,8 @@ export interface ActionHandlers {
 
 export interface StateView {
   [namespace: string]: any;
-  "@error": ErrorState;
-  "@loading": Partial<LoadingState>;
+  '@error': ErrorState;
+  '@loading': Partial<LoadingState>;
 }
 
 export interface ErrorState {
@@ -50,6 +50,7 @@ export abstract class BaseModel<S = {}, R = any> {
   abstract setState(newState: Partial<S>): void;
   abstract resetState(): void;
   abstract dispatch(action: AnyAction): void;
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   async onReady(_context?: NextPageContext): Promise<any> {
     // Extends to be overrode
     // Execute on the server or client before module render
@@ -81,12 +82,10 @@ export abstract class Exception {
   protected constructor(public message: string) {}
 }
 
-
 export interface StartOptons {
   withAction: boolean; // 是否生成action
   withDispatch: boolean; // 是否生成dispatch action
   withEffect: boolean; // 是否生成副作用函数
 }
-
 
 export type PageContext = NextPageContext;

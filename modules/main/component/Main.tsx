@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import Link from "next/link";
-import { helper } from "../../../framework";
+import React from 'react';
+import { connect } from 'react-redux';
+import Link from 'next/link';
+import { helper } from '../../../framework';
 
 interface Props {
   isLoading: boolean;
@@ -13,25 +13,25 @@ const Index = (props: Props) => {
   const { Component, pageProps } = props;
   return (
     <div>
-        <div>
+      <div>
         <Link href="/">
-            <a style={{ color: "#000", fontSize: 30 }}>/</a>
-          </Link>
-          <Link href="/home">
-            <a style={{ color: "#000", fontSize: 30 }}>home</a>
-          </Link>
-          &nbsp;&nbsp;
-          <Link href="/about">
-            <a style={{ color: "#000", fontSize: 30 }}>about</a>
-          </Link>
-        </div>
-        <Component {...pageProps} />
+          <a style={{ color: '#000', fontSize: 30 }}>/</a>
+        </Link>
+        <Link href="/home">
+          <a style={{ color: '#000', fontSize: 30 }}>home</a>
+        </Link>
+        &nbsp;&nbsp;
+        <Link href="/about">
+          <a style={{ color: '#000', fontSize: 30 }}>about</a>
+        </Link>
+      </div>
+      <Component {...pageProps} />
     </div>
   );
 };
 
-export default connect((state: any) => {
+export default connect(() => {
   return {
-    isLoading: helper.isLoading()
+    isLoading: helper.isLoading(),
   };
 })(Index);

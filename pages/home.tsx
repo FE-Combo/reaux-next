@@ -1,2 +1,2 @@
-import { View } from "../modules/home";
+import { View } from '../modules/home';
 export default View;

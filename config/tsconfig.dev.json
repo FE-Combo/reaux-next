@@ -14,7 +14,7 @@
     "noUnusedLocals": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true,    
-    "importHelpers": true,
+    "esModuleInterop": true,
+    "importHelpers": true
   }
 }

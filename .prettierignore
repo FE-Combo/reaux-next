@@ -1,0 +1,16 @@
+**/*.svg
+**/*.ejs
+**/*.html
+package.json
+.umi
+.umi-production
+.umi-test
+component-template/*
+node_modules/*
+docs/*
+es/*
+lib/*
+docsDist/*
+dist/*
+.next/*
+

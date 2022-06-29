@@ -1,1 +1,1 @@
-export default {"global":{"name":"name"}};
+export default { global: { name: 'name' } };

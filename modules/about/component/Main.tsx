@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const Index = (props: any) => {
+const Index = () => {
   return <div>about</div>;
 };
 

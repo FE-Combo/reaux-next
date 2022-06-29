@@ -1,6 +1,6 @@
-import React from "react";
-import { BaseModel} from "./type";
-import {NextPageContext} from "next";
+import React from 'react';
+import { BaseModel } from './type';
+import { NextPageContext } from 'next';
 
 /**
  * Create Component and proxy component lifecycle
@@ -9,7 +9,7 @@ import {NextPageContext} from "next";
  */
 export function createView<H extends BaseModel>(
   handler: H,
-  Component: React.ComponentType<any>
+  Component: React.ComponentType<any>,
 ): React.ComponentType<any> & {
   getInitialProps?: (context: NextPageContext) => any;
 } {

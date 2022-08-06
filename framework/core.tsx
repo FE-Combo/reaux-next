@@ -1,3 +1,4 @@
+import Router from 'next/router'
 import { Helper } from './helper';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
@@ -39,10 +40,24 @@ type Url = UrlObject | string;
 
 const isProd = process.env.NODE_ENV === 'production';
 
+// ref: https://github.com/danielr18/connected-next-router/issues/78
+/* Make `Router.asPath` return with `basePath` prefixed (if absent) */
+const patchedRouter = new Proxy(Router, {
+  get: (Router, key, receiver) => {
+    if (key === 'asPath') {
+      const { basePath, asPath } = Router
+      const replaced = asPath.includes(basePath) ? asPath : basePath + asPath
+      return replaced
+    } else {
+      return Reflect.get(Router, key, receiver)
+    }
+  }
+})
+
 // TODO: Dynamic and static separation
 function createAppCache(): AppCache {
   const applyMiddlewares = [
-    createRouterMiddleware(),
+    createRouterMiddleware({ Router: patchedRouter }),
     createLogger({ collapsed: true, predicate: () => false }),
     middleware(() => cache.actionHandlers),
   ];
@@ -194,7 +209,7 @@ function createApp(
     render() {
       return (
         <Provider store={cache.store}>
-          <ConnectedRouter>
+          <ConnectedRouter Router={patchedRouter}>
             <View {...this.props} />
           </ConnectedRouter>
         </Provider>

@@ -122,3 +122,12 @@
 
 - Q: 开发环境本地重复请求页面？
   1. 当前页面如果在next中不存在则会一直重试（next自身逻辑）
+
+- Q: 融合JD微应用框架点击回退按钮无法回退到正确的子应用页面？
+  ```
+    // modules/xxx/index.ts
+    window.addEventListener('popstate', () => {
+      const { pathname } = window.location;
+      this.router.replace(pathname, pathname);
+    });
+  ```

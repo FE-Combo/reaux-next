@@ -14,16 +14,16 @@ export function createView<H extends BaseModel>(
   getInitialProps?: (context: NextPageContext) => any;
 } {
   return class View<P extends {} = {}> extends React.PureComponent<P> {
-    componentDidMount() {
-      handler.onLoad();
+    async componentDidMount() {
+      await handler.onLoad();
     }
 
-    componentDidUpdate() {
-      handler.onUpdate();
+    async componentDidUpdate() {
+      await handler.onUpdate();
     }
 
-    componentWillUnmount() {
-      handler.onUnload();
+    async componentWillUnmount() {
+      await handler.onUnload();
     }
 
     render() {

@@ -1,5 +1,5 @@
 import { Reducer, combineReducers, ReducersMapObject } from 'redux';
-import { routerReducer } from 'connected-next-router';
+// import { routerReducer } from 'connected-next-router';
 import { StateView, ActionType } from './type';
 
 export function createActionType(namespace: string): string {
@@ -41,7 +41,7 @@ export function createReducer(
   const reducers: ReducersMapObject<StateView, any> = {
     '@error': createModuleReducer('@error'),
     '@loading': createModuleReducer('@loading'),
-    router: routerReducer,
+    // router: routerReducer,
     ...asyncReducers,
   };
   return combineReducers(reducers);

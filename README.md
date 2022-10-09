@@ -34,8 +34,9 @@
 
 - Model：生成 model 的父类
   - onReady: 相当于 getInitialProps
-    - 添加装饰器`@helper.onServer()/@helper。onClient()`指定执行端（服务端/客户端）。如果该函数存在返回值建议不要指定执行端（建议顶层模块只在服务端执行）。
+    - 添加装饰器`@helper.onServer()/@helper.onClient()`指定执行端（服务端/客户端）。如果该函数存在返回值建议不要指定执行端（建议顶层模块只在服务端执行）。
     - 不要在该生命周期中使用`window.location`对象，无论是服务端还是客户端，location 相关的值可以直接从 onReady 参数中获取；
+    - onReady在客户端执行时，点击浏览器回退按钮也会触发该生命周期；
   - onLoad: 相当于 componentDidMount，顶层模块会在子模块加载完成后执行
   - onUpdate: 相当于 componentDidUpdate
   - onUnLoad: 相当于 componentWillUnmount

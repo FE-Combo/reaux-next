@@ -3,8 +3,7 @@ import { Helper } from './helper';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import React, { ComponentType, ComponentClass } from 'react';
-import { createAction } from './createAction';
-import { middleware } from './middleware';
+import {createAction, middleware, createView, createActionType, createReducer, App as AppCache, setModuleAction, createModuleReducer, createApp as createBaseApp, BaseModel} from "reaux";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   ConnectedRouter,
@@ -15,21 +14,14 @@ import {
   push,
   replace,
   prefetch,
+  routerReducer
 } from 'connected-next-router';
-import { StateView, BaseModel, AppCache } from './type';
+import { StateView, BaseModel as NextBaseModel, ModuleView} from './type';
 import {
   createStore,
   applyMiddleware,
-  ReducersMapObject,
-  AnyAction,
+  AnyAction
 } from 'redux';
-import { createView } from './createView';
-import {
-  createActionType,
-  createReducer,
-  setModuleAction,
-  createModuleReducer,
-} from './createReducer';
 import { isServer } from './util';
 import chalk from 'chalk';
 import { AppContext } from 'next/dist/pages/_app';
@@ -61,21 +53,16 @@ function createAppCache(): AppCache {
     createLogger({ collapsed: true, predicate: () => false }),
     middleware(() => cache.actionHandlers),
   ];
-  const cache = {
-    actionHandlers: {},
-    asyncReducers: {} as ReducersMapObject<StateView, any>,
-    injectReducer: (namespace, asyncReducer) => {
-      cache.asyncReducers[namespace] = asyncReducer;
-      cache.store.replaceReducer(createReducer(cache.asyncReducers));
-    },
-    store: createStore(
-      createReducer(),
-      composeWithDevTools({
-        predicate: (state, action) =>
-          !/^@@framework\/actionsHandler/.test(action.type),
-      })(applyMiddleware(...applyMiddlewares)),
-    ),
-  };
+  const store = createStore(
+    createReducer(),
+    composeWithDevTools({
+      predicate: (state, action) =>
+        !/^@@framework\/actionsHandler/.test(action.type),
+    })(applyMiddleware(...applyMiddlewares)),
+  );
+  const cache = createBaseApp(store)
+  cache.asyncReducers["router"] = routerReducer;
+  cache.store.replaceReducer(createReducer(cache.asyncReducers));
   return cache;
 }
 
@@ -108,7 +95,7 @@ function register<H extends BaseModel>(
     modelInject(handler, actionHandlers);
   }
 
-  const View = createView(handler, Component);
+  const View = createView(handler, Component) as ModuleView;
   View.getInitialProps = async (context: NextPageContext) => {
     if (isServer) {
       if (!isProd) {
@@ -121,26 +108,64 @@ function register<H extends BaseModel>(
       modelInject(handler, actionHandlers);
     }
 
-    const onReady = handler.onReady as any;
+    const onReady = handler.onReady.bind(handler) as any as ((context: NextPageContext)=>Promise<any>) & {inClient: boolean; inServer: boolean;};
     if (
       (!!onReady.inServer && !!onReady.inClient) ||
       (!onReady.inServer && !onReady.inClient)
     ) {
       // execute in server and client
-      return (await handler.onReady(context)) || {};
+      return (await onReady(context)) || {};
     } else {
       if (!!onReady.inServer && isServer) {
         // execute only in server
-        return (await handler.onReady(context)) || {};
+        return (await onReady(context)) || {};
       } else if (!!onReady.inClient && !isServer) {
         // execute only in client
-        return (await handler.onReady(context)) || {};
+        return (await onReady(context)) || {};
       }
       return {};
     }
   };
 
-  return { View, actions };
+  return { 
+    View, 
+    actions,
+    proxyLifeCycle: (View: ComponentType<any>) => {
+      // register next view
+      const NextView = createView(handler, View) as ModuleView;
+      NextView.getInitialProps = async (context: NextPageContext) => {
+        if (isServer) {
+          if (!isProd) {
+            console.info(
+              `${chalk.green('ready')} - ${
+                handler.moduleName
+              } getInitialProps successfully`,
+            );
+          }
+          modelInject(handler, actionHandlers);
+        }
+    
+        const onReady = handler.onReady.bind(handler) as any as ((context: NextPageContext)=>Promise<any>) & {inClient: boolean; inServer: boolean;};
+        if (
+          (!!onReady.inServer && !!onReady.inClient) ||
+          (!onReady.inServer && !onReady.inClient)
+        ) {
+          // execute in server and client
+          return (await onReady(context)) || {};
+        } else {
+          if (!!onReady.inServer && isServer) {
+            // execute only in server
+            return (await onReady(context)) || {};
+          } else if (!!onReady.inClient && !isServer) {
+            // execute only in client
+            return (await onReady(context)) || {};
+          }
+          return {};
+        }
+      };
+      return NextView;
+    },
+  }
 }
 
 // client inject is executed at the beginning, server register in getInitialProps. because getInitialProps cannot continue to be executed on the client after the server is executed
@@ -218,29 +243,34 @@ function createApp(
   };
 }
 
-class Model<S = {}, R = StateView> extends BaseModel<S, R> {
+// TODO: move to reaux
+class Model<S = {}, R = StateView> extends NextBaseModel<S, R>{
   public constructor(readonly moduleName: string, readonly initState: S) {
     super();
   }
 
   get state(): Readonly<S> {
-    return cache.store.getState()[this.moduleName] as S;
+      return cache.store.getState()[this.moduleName];
+  }
+
+  get initialState(): Readonly<S> {
+      return this.initState;
   }
 
   get rootState(): Readonly<R> {
-    return cache.store.getState();
+      return cache.store.getState();
   }
 
   setState(newState: Partial<S>) {
-    cache.store.dispatch(setModuleAction(this.moduleName, newState));
+      cache.store.dispatch(setModuleAction(this.moduleName, newState));
   }
 
   resetState() {
-    cache.store.dispatch(setModuleAction(this.moduleName, this.initState));
+      cache.store.dispatch(setModuleAction(this.moduleName, this.initState));
   }
 
   dispatch(action: AnyAction) {
-    cache.store.dispatch(action);
+      cache.store.dispatch(action);
   }
 
   get router() {

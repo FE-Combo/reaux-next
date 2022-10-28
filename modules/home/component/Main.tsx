@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../index';
 import { AllState } from '../../../utils/state';
+import Router from 'next/router';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const Index = () => {
         &nbsp;&nbsp;
         <Button onClick={() => changeLang('EN')}>设置为英文</Button>
       </div>
+      <Button onClick={() => Router.push("/home/detail")}>详情页</Button>
     </>
   );
 };

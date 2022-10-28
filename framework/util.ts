@@ -34,7 +34,7 @@ export function handlerDecorator<S extends StateView>(
   return (target, name, descriptor) => {
     const fn = descriptor.value;
     descriptor.value = async function (...args: any[]) {
-      const rootState: S = (target as any).rootState;
+      const rootState: S = (target as any)?.rootState;
       await interceptor(fn!.bind(this, ...args), rootState);
     };
     if (typeof options?.callback === 'function') {

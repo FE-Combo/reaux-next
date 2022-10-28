@@ -1,4 +1,4 @@
-import { LoadingState, ErrorState } from '../framework/type';
+import { LoadingState, ErrorState } from 'reaux';
 import { State as MainState } from 'modules/main/type';
 import { State as HomeState } from 'modules/home/type';
 import { State as AboutState } from 'modules/about/type';

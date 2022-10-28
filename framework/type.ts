@@ -1,46 +1,28 @@
-import { Store, Action, ReducersMapObject, AnyAction } from 'redux';
 import { NextPageContext } from 'next';
-
-export interface AppCache {
-  actionHandlers: ActionHandlers;
-  store?: Store<any>;
-  // Add a dictionary to keep track of the registered async reducers
-  asyncReducers: ReducersMapObject<StateView, any>;
-  // adds the async reducer, and creates a new combined reducer
-  injectReducer: (
-    namespace: string,
-    asyncReducers: ReducersMapObject<StateView, any>,
-  ) => any;
-}
-
-export interface ActionHandlers {
-  [key: string]: (...args: any[]) => any;
-}
-
-export interface StateView {
-  [namespace: string]: any;
+import {State, ErrorState, LoadingState} from "reaux"
+import { RouterState } from 'connected-next-router';
+export interface StateView extends State {
   '@error': ErrorState;
   '@loading': Partial<LoadingState>;
-}
-
-export interface ErrorState {
-  runtimeException: any;
-  apiException: any;
-}
-
-export interface LoadingState {
-  [loadingType: string]: number;
-}
-
-export interface ActionType<P = any> extends Action {
-  name?: string;
-  payload: P;
+  "router": RouterState;
+  [namespace: string]: any;
 }
 
 export interface ActionPayload {
   module: string;
   state: object;
 }
+
+export interface StartOptons {
+  withAction: boolean; // 是否生成action
+  withDispatch: boolean; // 是否生成dispatch action
+  withEffect: boolean; // 是否生成副作用函数
+}
+
+export type PageContext = NextPageContext;
+
+export type ModuleView = React.ComponentType<any> & { getInitialProps?: (context: NextPageContext) => any}
+
 
 export abstract class BaseModel<S = {}, R = any> {
   abstract readonly moduleName: string;
@@ -49,7 +31,7 @@ export abstract class BaseModel<S = {}, R = any> {
   abstract rootState: Readonly<R>;
   abstract setState(newState: Partial<S>): void;
   abstract resetState(): void;
-  abstract dispatch(action: AnyAction): void;
+  abstract dispatch(action: any): void;
   /* eslint-disable @typescript-eslint/no-unused-vars */
   async onReady(_context?: NextPageContext): Promise<any> {
     // Extends to be overrode
@@ -77,15 +59,3 @@ export abstract class BaseModel<S = {}, R = any> {
     // Disappear in viewport
   }
 }
-
-export abstract class Exception {
-  protected constructor(public message: string) {}
-}
-
-export interface StartOptons {
-  withAction: boolean; // 是否生成action
-  withDispatch: boolean; // 是否生成dispatch action
-  withEffect: boolean; // 是否生成副作用函数
-}
-
-export type PageContext = NextPageContext;

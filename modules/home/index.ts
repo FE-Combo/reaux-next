@@ -1,4 +1,5 @@
 import Main from './component/Main';
+import Detail from "./component/Detail"
 import { register, Model, helper } from '../../framework';
 import { State } from './type';
 
@@ -45,7 +46,9 @@ class ActionHandler extends Model<State> {
   }
 }
 
-export const { actions, View } = register(
+export const { actions, View, proxyLifeCycle} = register(
   new ActionHandler('home', initialState),
   Main,
 );
+
+export const HomeDetail = proxyLifeCycle(Detail)

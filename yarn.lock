@@ -3300,7 +3300,7 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-redux@^8.0.4, react-redux@~8.0.4:
+react-redux@~8.0.4:
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-8.0.4.tgz#80c31dffa8af9526967c4267022ae1525ff0e36a"
   integrity sha512-yMfQ7mX6bWuicz2fids6cR1YT59VTuT8MKyyE310wJQlINKENCeT1UcPdEiX6znI5tF8zXyJ/VYvDgeGuaaNwQ==
@@ -3377,10 +3377,10 @@ readable-stream@~2.3.6:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-reaux@2.1.0-alpha.1:
-  version "2.1.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/reaux/-/reaux-2.1.0-alpha.1.tgz#11296320c3cf2ba171fcf54f406b094dde524fa0"
-  integrity sha512-JJn7jMJDEauw6BibNxJ6FtiXC518uNX7wgvMegxXNT+/p+l2jAjmKMXVuynUwNpfja75c3UebPwH/cARGZ+l3g==
+reaux@2.1.0-alpha.2:
+  version "2.1.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/reaux/-/reaux-2.1.0-alpha.2.tgz#afdf9d89be45d7dddabc6b729842d82a2b3848ab"
+  integrity sha512-qlGozIt63g4IMgy2rQ7zxmw8VLrDjolNME5+8R9F/4U0x+2Z/xdqKyKVD0DLg81aEq7Jgh4TaKBc9XMaht2x+g==
   dependencies:
     "@types/react" "~18.0.21"
     "@types/react-redux" "~7.1.24"

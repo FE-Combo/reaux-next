@@ -1,6 +1,6 @@
 import Main from './component/Main';
 import Detail from "./component/Detail"
-import { register, Model, helper } from '../../framework';
+import { register, Model, helper } from 'dist';
 import { State } from './type';
 
 const initialState: State = {

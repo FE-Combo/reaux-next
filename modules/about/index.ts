@@ -1,5 +1,5 @@
 import Main from './component/Main';
-import { register, Model, helper } from '../../framework';
+import { register, Model, helper } from 'dist';
 import { State } from './type';
 
 const initialState: State = {

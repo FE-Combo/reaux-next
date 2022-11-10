@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
-import { helper } from '../../../framework';
+import { helper } from 'dist';
 
 interface Props {
   isLoading: boolean;

@@ -1,4 +1,4 @@
-import { isServer } from '../../framework';
+import { isServer } from 'dist';
 import axios from 'axios';
 import cookie from 'js-cookie';
 import Router from 'next/router';

@@ -1,5 +1,5 @@
 import Main from './component/Main';
-import { start, Model } from '../../framework';
+import { start, Model } from 'dist';
 import BaseApp from 'next/app';
 import { NextPageContext } from 'next';
 import { State } from './type';

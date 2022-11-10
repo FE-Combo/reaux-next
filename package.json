@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "reinstall": "rm -rf node_modules && rm -rf yarn.lock && rm -rf .next && yarn install",
-    "dev": "next",
+    "dev": "yarn build:lib && next",
     "build": "next build",
     "start": "next start",
     "build:lib": "rm -rf dist && tsc -p config/tsconfig.build.json",
@@ -79,7 +79,7 @@
     "@types/redux-logger": "~3.0.8",
     "connected-next-router": "~4.2.0",
     "react-redux": "~8.0.4",
-    "reaux": "2.1.0-alpha.2",
+    "reaux": "2.1.0-alpha.3",
     "redux-devtools-extension": "~2.13.9",
     "redux-logger": "~3.0.6",
     "tslib": "~2.3.1"

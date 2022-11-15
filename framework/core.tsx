@@ -51,7 +51,7 @@ function createAppCache(): AppCache {
   const applyMiddlewares = [
     createRouterMiddleware({ Router: patchedRouter }),
     createLogger({ collapsed: true, predicate: () => false }),
-    middleware(() => cache.actionHandlers),
+    middleware(() => Object.assign(cache.actionHandlers)),
   ];
   const store = createStore(
     createReducer(),
@@ -62,13 +62,13 @@ function createAppCache(): AppCache {
   );
   const cache = createBaseApp(store)
   cache.asyncReducers["router"] = routerReducer;
-  cache.store.replaceReducer(createReducer(cache.asyncReducers));
+  cache.store.replaceReducer(createReducer(Object.assign({}, cache.asyncReducers)));
   return cache;
 }
 
 let cache = isServer ? null : createAppCache();
 
-const helper = new Helper(cache);
+const helper = new Helper(Object.assign({},cache));
 
 function start<H extends BaseModel>(
   handler: H,
@@ -233,7 +233,7 @@ function createApp(
 
     render() {
       return (
-        <Provider store={cache.store}>
+        <Provider store={Object.assign({}, cache.store)}>
           <ConnectedRouter Router={patchedRouter}>
             <View {...this.props} />
           </ConnectedRouter>

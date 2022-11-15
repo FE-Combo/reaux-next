@@ -4,7 +4,7 @@ import { App as AppCache } from "reaux"
 import { setModuleAction, createActionType } from 'reaux';
 
 export class Helper {
-  appCache: AppCache;
+  private appCache: AppCache;
   constructor(appCache: AppCache) {
     this.appCache = appCache;
   }

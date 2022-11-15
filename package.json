@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "reinstall": "rm -rf node_modules && rm -rf yarn.lock && rm -rf .next && yarn install",
-    "dev": "yarn build:lib && next",
+    "dev": "yarn build:lib && next dev",
     "build": "next build",
     "start": "next start",
     "build:lib": "rm -rf dist && tsc -p config/tsconfig.build.json",

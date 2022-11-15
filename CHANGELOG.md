@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4-beta.12](https://github.com/vocoWone/reaux-next/compare/v0.0.4-beta.11...v0.0.4-beta.12) (2022-11-15)
+
+
+### Bug Fixes
+
+* object shallow clone ([757cde8](https://github.com/vocoWone/reaux-next/commit/757cde80849a8a65a1a9d5778ee2e6fa547ef361))
+
 ### [0.0.4-beta.11](https://github.com/vocoWone/reaux-next/compare/v0.0.4-beta.10...v0.0.4-beta.11) (2022-11-10)
 
 ### [0.0.4-beta.10](https://github.com/vocoWone/reaux-next/compare/v0.0.4-beta.9...v0.0.4-beta.10) (2022-10-29)

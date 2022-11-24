@@ -1298,9 +1298,9 @@ doctrine@^3.0.0:
     esutils "^2.0.2"
 
 dom-align@^1.7.0:
-  version "1.12.3"
-  resolved "https://registry.yarnpkg.com/dom-align/-/dom-align-1.12.3.tgz#a36d02531dae0eefa2abb0c4db6595250526f103"
-  integrity sha512-Gj9hZN3a07cbR6zviMUBOMPdWxYhbMI+x+WS0NAIu2zFZmbK8ys9R79g+iG9qLnlCwpFoaB+fKy8Pdv470GsPA==
+  version "1.12.4"
+  resolved "https://registry.yarnpkg.com/dom-align/-/dom-align-1.12.4.tgz#3503992eb2a7cfcb2ed3b2a6d21e0b9c00d54511"
+  integrity sha512-R8LUSEay/68zE5c8/3BDxiTEvgb4xZTF0RKmAHfiEVN3klfIpXfi2/QCoiWPccVQ0J/ZGdz9OjzL4uJEP/MRAw==
 
 dot-i18n@^0.0.7:
   version "0.0.7"
@@ -3017,9 +3017,9 @@ rc-image@~5.12.0:
     rc-util "^5.0.6"
 
 rc-input-number@~7.3.9:
-  version "7.3.9"
-  resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-7.3.9.tgz#bc6560376ea595e3bf8fbd3137711cbc158800b5"
-  integrity sha512-u0+miS+SATdb6DtssYei2JJ1WuZME+nXaG6XGtR8maNyW5uGDytfDu60OTWLQEb0Anv/AcCzehldV8CKmKyQfA==
+  version "7.3.11"
+  resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-7.3.11.tgz#c7089705a220e1a59ba974fabf89693e00dd2442"
+  integrity sha512-aMWPEjFeles6PQnMqP5eWpxzsvHm9rh1jQOWXExUEIxhX62Fyl/ptifLHOn17+waDG1T/YUb6flfJbvwRhHrbA==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "^2.2.5"
@@ -3234,9 +3234,9 @@ rc-tooltip@~5.2.0:
     rc-trigger "^5.0.0"
 
 rc-tree-select@~5.5.0:
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/rc-tree-select/-/rc-tree-select-5.5.3.tgz#9c19f74b55a00f17e31a81cf04c834e63e6bee27"
-  integrity sha512-gv8KyC6J7f9e50OkGk1ibF7v8vL+iaBnA8Ep/EVlMma2/tGdBQXO9xIvPjX8eQrZL5PjoeTUndNPM3cY3721ng==
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/rc-tree-select/-/rc-tree-select-5.5.4.tgz#5eef6845fd71085c52c042553abb3bfe7a0108f3"
+  integrity sha512-RdqOm3o+ybpdD3Jc+fYJ2hXlcODcMQIqSytjWzdTh7n2h5i7yIjSx4mprdbrF/buykU6kg1LURseWz9S2e6P2Q==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "2.x"
@@ -4015,9 +4015,9 @@ typedarray@^0.0.6:
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
 typescript@^4.5.4:
-  version "4.8.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
-  integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.3.tgz#3aea307c1746b8c384435d8ac36b8a2e580d85db"
+  integrity sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==
 
 uglify-js@^3.1.4:
   version "3.17.4"

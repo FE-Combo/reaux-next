@@ -12,7 +12,7 @@ class ActionHandler extends Model<State> {
   async onReady() {
     // 对应next.js中的getInitialProps方法
     console.info('home');
-    await this.setState({ name: 'new name' });
+    this.setState({ name: 'new name' });
   }
 
   async onLoad() {

@@ -8,6 +8,7 @@
   "scripts": {
     "reinstall": "rm -rf node_modules && rm -rf yarn.lock && rm -rf .next && yarn install",
     "dev": "yarn build:lib && next dev",
+    "dev:inspect": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "build:lib": "rm -rf dist && tsc -p config/tsconfig.build.json",

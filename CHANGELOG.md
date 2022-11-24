@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/vocoWone/reaux-next/compare/v0.0.4-beta.12...v0.0.4) (2022-11-24)
+
+
+### Bug Fixes
+
+* prettier ([cbec66b](https://github.com/vocoWone/reaux-next/commit/cbec66bfd47d93b7d32eaf9642a0d52f486bfb75))
+
 ### [0.0.4-beta.12](https://github.com/vocoWone/reaux-next/compare/v0.0.4-beta.11...v0.0.4-beta.12) (2022-11-15)
 
 ### Bug Fixes

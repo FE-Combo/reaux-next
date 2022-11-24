@@ -1,10 +1,10 @@
 import { NextPageContext } from 'next';
-import {State, ErrorState, LoadingState} from "reaux"
+import { State, ErrorState, LoadingState } from 'reaux';
 import { RouterState } from 'connected-next-router';
 export interface StateView extends State {
   '@error': ErrorState;
   '@loading': Partial<LoadingState>;
-  "router": RouterState;
+  router: RouterState;
   [namespace: string]: any;
 }
 
@@ -21,8 +21,9 @@ export interface StartOptons {
 
 export type PageContext = NextPageContext;
 
-export type ModuleView = React.ComponentType<any> & { getInitialProps?: (context: NextPageContext) => any}
-
+export type ModuleView = React.ComponentType<any> & {
+  getInitialProps?: (context: NextPageContext) => any;
+};
 
 export abstract class BaseModel<S = {}, R = any> {
   abstract readonly moduleName: string;

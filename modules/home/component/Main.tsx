@@ -37,7 +37,7 @@ const Index = () => {
         &nbsp;&nbsp;
         <Button onClick={() => changeLang('EN')}>设置为英文</Button>
       </div>
-      <Button onClick={() => Router.push("/home/detail")}>详情页</Button>
+      <Button onClick={() => Router.push('/home/detail')}>详情页</Button>
     </>
   );
 };

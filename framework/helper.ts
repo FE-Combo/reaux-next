@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { handlerDecorator, isServer } from './util';
-import { App as AppCache } from "reaux"
+import { App as AppCache } from 'reaux';
 import { setModuleAction, createActionType } from 'reaux';
 
 export class Helper {

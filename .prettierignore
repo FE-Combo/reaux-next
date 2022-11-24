@@ -13,4 +13,4 @@ lib/*
 docsDist/*
 dist/*
 .next/*
-
+out/*

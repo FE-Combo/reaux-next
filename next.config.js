@@ -1,7 +1,6 @@
 const isDev = process.env.NODE_ENV !== 'production';
 
-
-const assetPrefix = "/"
+const assetPrefix = '/';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -13,14 +12,13 @@ const nextConfig = {
   },
   webpack: (config) => {
     return config;
-  }
+  },
 };
 
 module.exports = (_phase, { defaultConfig }) => {
   const plugins = [];
   return plugins.reduce((acc, plugin) => plugin(acc), {
     ...defaultConfig,
-    ...nextConfig
+    ...nextConfig,
   });
 };
-

@@ -10,7 +10,7 @@ const initialState: State = {
 
 class ActionHandler extends Model<State> {
   async onReady(_context: NextPageContext) {
-    // console.info(_context);
+    console.info(_context);
   }
 }
 

@@ -36,7 +36,7 @@
   - onReady: 相当于 getInitialProps
     - 添加装饰器`@helper.onServer()/@helper.onClient()`指定执行端（服务端/客户端）。如果该函数存在返回值建议不要指定执行端（建议顶层模块只在服务端执行）。
     - 不要在该生命周期中使用`window.location`对象，无论是服务端还是客户端，location 相关的值可以直接从 onReady 参数中获取；
-    - onReady在客户端执行时，点击浏览器回退按钮也会触发该生命周期；
+    - onReady 在客户端执行时，点击浏览器回退按钮也会触发该生命周期；
   - onLoad: 相当于 componentDidMount，顶层模块会在子模块加载完成后执行
   - onUpdate: 相当于 componentDidUpdate
   - onUnLoad: 相当于 componentWillUnmount
@@ -118,8 +118,9 @@
 - Q: 相较于 dva 有什么优势？ 1.按需加载；2.更加健全的 ts 校验
 
 - Q: 热更新失效？
+
   1. onReady 服务端执行时会导致热更新失效，onReady 实际是调用 next 的 getInitialProps 方法，getInitialProps 的热更新本身就存在问题，期待官方后续的修复。
   2. 当控制台有报错信息时热更新同样失效。
 
 - Q: 开发环境本地重复请求页面？
-  1. 当前页面如果在next中不存在则会一直重试（next自身逻辑）
+  1. 当前页面如果在 next 中不存在则会一直重试（next 自身逻辑）

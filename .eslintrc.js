@@ -9,6 +9,7 @@ module.exports = {
     'component-template/*',
     'dist/*',
     '.next/*',
+    'out/*',
   ],
   env: {
     browser: true,

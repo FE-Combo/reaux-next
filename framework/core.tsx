@@ -103,38 +103,43 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
   View.getInitialProps = async (
     context: NextPageContext & { cache: AppCache },
   ) => {
-    if (isServer) {
-      if (!isProd) {
-        console.info(
-          `${chalk.green('ready')} - ${
-            handler.moduleName
-          } getInitialProps successfully`,
-        );
+    try {
+      if (isServer) {
+        if (!isProd) {
+          console.info(
+            `${chalk.green('ready')} - ${
+              handler.moduleName
+            } getInitialProps successfully`,
+          );
+        }
+        modelInject(handler, actionHandlers, context.cache);
+        // model 赋予 cache
+        handler._cache = context.cache;
       }
-      modelInject(handler, actionHandlers, context.cache);
-      // model 赋予 cache
-      handler._cache = context.cache;
-    }
-
-    const onReady = handler.onReady.bind(handler) as any as ((
-      context: NextPageContext,
-    ) => Promise<any>) & { inClient: boolean; inServer: boolean };
-    if (
-      (!!onReady.inServer && !!onReady.inClient) ||
-      (!onReady.inServer && !onReady.inClient)
-    ) {
-      // execute in server and client
-      return (await onReady(context)) || {};
-    } else {
-      if (!!onReady.inServer && isServer) {
-        // execute only in server
+  
+      const onReady = handler.onReady.bind(handler) as any as ((
+        context: NextPageContext,
+      ) => Promise<any>) & { inClient: boolean; inServer: boolean };
+      if (
+        (!!onReady.inServer && !!onReady.inClient) ||
+        (!onReady.inServer && !onReady.inClient)
+      ) {
+        // execute in server and client
         return (await onReady(context)) || {};
-      } else if (!!onReady.inClient && !isServer) {
-        // execute only in client
-        return (await onReady(context)) || {};
+      } else {
+        if (!!onReady.inServer && isServer) {
+          // execute only in server
+          return (await onReady(context)) || {};
+        } else if (!!onReady.inClient && !isServer) {
+          // execute only in client
+          return (await onReady(context)) || {};
+        }
+        return {};
       }
+    } catch (error) {
+      console.error(error)
       return {};
-    }
+    } 
   };
 
   return {
@@ -146,34 +151,39 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
       NextView.getInitialProps = async (
         context: NextPageContext & { cache: AppCache },
       ) => {
-        if (isServer) {
-          if (!isProd) {
-            console.info(
-              `${chalk.green('ready')} - ${
-                handler.moduleName
-              } getInitialProps successfully`,
-            );
+        try {
+          if (isServer) {
+            if (!isProd) {
+              console.info(
+                `${chalk.green('ready')} - ${
+                  handler.moduleName
+                } getInitialProps successfully`,
+              );
+            }
+            modelInject(handler, actionHandlers, context.cache);
           }
-          modelInject(handler, actionHandlers, context.cache);
-        }
-
-        const onReady = handler.onReady.bind(handler) as any as ((
-          context: NextPageContext,
-        ) => Promise<any>) & { inClient: boolean; inServer: boolean };
-        if (
-          (!!onReady.inServer && !!onReady.inClient) ||
-          (!onReady.inServer && !onReady.inClient)
-        ) {
-          // execute in server and client
-          return (await onReady(context)) || {};
-        } else {
-          if (!!onReady.inServer && isServer) {
-            // execute only in server
+  
+          const onReady = handler.onReady.bind(handler) as any as ((
+            context: NextPageContext,
+          ) => Promise<any>) & { inClient: boolean; inServer: boolean };
+          if (
+            (!!onReady.inServer && !!onReady.inClient) ||
+            (!onReady.inServer && !onReady.inClient)
+          ) {
+            // execute in server and client
             return (await onReady(context)) || {};
-          } else if (!!onReady.inClient && !isServer) {
-            // execute only in client
-            return (await onReady(context)) || {};
+          } else {
+            if (!!onReady.inServer && isServer) {
+              // execute only in server
+              return (await onReady(context)) || {};
+            } else if (!!onReady.inClient && !isServer) {
+              // execute only in client
+              return (await onReady(context)) || {};
+            }
+            return {};
           }
+        } catch (error) {
+          console.error(error)
           return {};
         }
       };

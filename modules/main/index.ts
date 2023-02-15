@@ -9,8 +9,14 @@ const initialState: State = {
 };
 
 class ActionHandler extends Model<State> {
-  async onReady(_context: NextPageContext) {
-    console.info(_context);
+  async onReady(context: NextPageContext) {
+    if (!this.isRefreshRoutes(context.pathname || '/')) {
+      // TODO:
+    }
+  }
+
+  isRefreshRoutes(path: string) {
+    return path === '/_next/webpack-hmr' || path.startsWith('/_next/static/');
   }
 }
 

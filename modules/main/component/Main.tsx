@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
-import { helper } from 'dist';
+import { helper, BaseModuleProps } from 'dist';
 
-interface Props {
+interface Props extends BaseModuleProps {
   isLoading: boolean;
-  Component: React.ComponentType<any>; // router component
-  pageProps: object; // router component props
 }
 
 const Index = (props: Props) => {

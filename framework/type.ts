@@ -21,8 +21,8 @@ export interface StartOptons {
 
 export type PageContext = NextPageContext;
 
-export type ModuleView = React.ComponentType<any> & {
-  getInitialProps?: (context: NextPageContext) => any;
+export type ModuleView<T=any, R=any> = React.ComponentType<T> & {
+  getInitialProps?: (context: NextPageContext) => R;
 };
 
 export abstract class BaseModel<S = {}, R = any> {
@@ -59,4 +59,9 @@ export abstract class BaseModel<S = {}, R = any> {
     // Extends to be overrode
     // Disappear in viewport
   }
+}
+
+export interface BaseModuleProps<T=any, P=object> {
+  Component: React.ComponentType<T>; // router component
+  pageProps: P; // router component props
 }

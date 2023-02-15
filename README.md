@@ -1,4 +1,5 @@
 [![npm version](https://img.shields.io/npm/v/reaux-next.svg?style=flat)](https://www.npmjs.com/package/reaux-next)
+![downloads](https://img.shields.io/npm/dt/reaux-next.svg)
 
 <img width="100" src="./logo.png"/> <img width="150" src="https://www.nextjs.cn/static/images/nextjs-logo.png"/>
 
@@ -69,6 +70,38 @@
 - `router`: 路由状态，具体[参考](https://github.com/danielr18/connected-next-router)
 - `[...modules]`: 模块 state，命名有 model 的 namespace 决定。
 
+## 移动端适配
+- nextjs本身就使用了[PostCSS](https://www.nextjs.cn/docs/advanced-features/customizing-postcss-config#customizing-plugins)，所以可以直接使用 [postcss-pxtorem](https://github.com/cuth/postcss-pxtorem) 进行处理的
+- 在根目录下创建 postcss.config.js，若配置未生效删除.next并重启项目
+  ```
+  // postcss.config.js
+  module.exports = {
+    plugins: {
+      'postcss-pxtorem': {
+        rootValue: 100,
+        unitPrecision: 5,
+        propList: ["*"],
+        selectorBlackList: [/^\.html/], //排除html样式
+        replace: true,
+        mediaQuery: false,
+        minPixelValue: 0
+      }
+    }
+  }
+  ```
+- head 中新增 `<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"></meta>`
+- 给 html 添加 css
+```
+html {
+  /* 1920代表设计稿宽度, 100代表rootValue */
+  font-size: calc(100vw / 1920 / 100);
+}
+```
+
+## template
+- todo: web application
+- todo: h5 application
+
 ## Attentions
 
 - 模块之间可以是完全独立，也可以是嵌套关系，还可以是数据耦合关系；
@@ -86,6 +119,8 @@
   - 不要同时使用二者
   - i18n("xx")单独包装一层，与 actions 在不同文件中
   - 修改后还是报错，尝试重新`yarn build`
+
+- 在微应用架构中，基座应用以router.push/this.router.push方式会修改基座应用 redux.router 状态；子应用以 router.push 方式修改路由无法改变基座应用 redux.router 状态，this.router.push 会修改基座应用 redux.router 状态。
 
 ## Q&A
 

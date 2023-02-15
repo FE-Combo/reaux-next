@@ -81,9 +81,7 @@ const helper = new Helper(clientCache);
 
 function start<H extends Model>(
   handler: H,
-  Component: ComponentType<any> & {
-    getInitialProps?: (context: NextPageContext) => any;
-  },
+  Component: ModuleView,
   BaseApp: ComponentClass,
 ) {
   const { View, actions } = register(handler, Component);
@@ -92,7 +90,7 @@ function start<H extends Model>(
   return { View: App, actions };
 }
 
-function register<H extends Model>(handler: H, Component: ComponentType<any>) {
+function register<H extends Model>(handler: H, Component: ModuleView) {
   // TODO: 检测 module namespace重复，包括[@error, @loading, router]
 
   // create actions&handlers
@@ -205,7 +203,7 @@ function modelInject<H extends Model>(
 
 // Reister top level module
 function createApp(
-  View: ComponentType & { getInitialProps?: (context: NextPageContext) => any },
+  View: ModuleView,
   BaseApp: ComponentClass<{ cache?: AppCache }>,
 ) {
   return class App extends BaseApp {

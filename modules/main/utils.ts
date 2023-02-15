@@ -1,68 +1,91 @@
 import { isServer } from 'dist';
-import axios from 'axios';
+import { axios } from 'utils/ajax';
 import cookie from 'js-cookie';
-import Router from 'next/router';
-import { NextPageContext, NextApiRequest } from 'next';
+import encodeurl from 'encodeurl';
+import { NextApiRequest, NextPageContext } from 'next';
 
-const LOGIN_PATH = '/login';
+
+export const QUIT_LOGIN_CODE = [
+  'SID_INVALID',
+  'SESSION_INVALID',
+  'CSRFTOKEN_INVALID',
+  401,
+  '401',
+];
+
+export const LOGIN_PATH = '/account/login';
 
 export function ajaxInterceptorsInServer(context: NextPageContext) {
   if (isServer) {
+    axios.interceptors.request.clear();
+    axios.interceptors.response.clear();
+
     axios.defaults.baseURL = `http://localhost:${process.env.PORT || 3000}`;
     const req = context?.req as NextApiRequest;
     axios.interceptors.request.use(
       function (config) {
         // 避免多次注册多次执行
-        if (config?.headers?.['x-protocol']) {
+        if (config?.headers.get('X-Requested-With')) {
           return config;
         }
-        if (!config.headers) {
-          config.headers = {};
+        config.headers.set('X-Requested-With', 'XMLHttpRequest');
+
+        if (req?.headers?.['x-forwarded-host']) {
+          config.headers.set('x-forwarded-host', req?.headers?.['x-forwarded-host']);
         }
-        config.headers['x-protocol'] = 'highway';
+        if (req?.headers?.['x_ty_host']) {
+          config.headers.set('x_ty_host', req?.headers?.['x_ty_host']);
+        }
+        if (req?.headers?.['region']) {
+          config.headers.set('region', req?.headers?.['region']);
+        }
+
         if (req?.cookies?.['csrf-token']) {
-          config.headers['csrf-token'] = req?.cookies?.['csrf-token'];
+          config.headers.set('csrf-token', req?.cookies?.['csrf-token']);
         }
-        config.headers['Cookie'] = Object.entries(req?.cookies || {})
-          .map(([key, value]) => `${key}=${value}`)
-          .join(';');
+
+        config.headers.set(
+          'Cookie',
+          encodeurl(
+            Object.entries(req?.cookies || {})
+              .map(([key, value]) => `${key}=${value}`)
+              .join(';')
+          )
+        );
+
         if (req?.headers?.['x-b3-traceid']) {
-          config.headers['x-b3-traceid'] = req?.headers?.[
-            'x-b3-traceid'
-          ] as string;
+          config.headers.set('x-b3-traceid', req?.headers?.['x-b3-traceid'] as string);
         }
+
         if (req?.headers?.['x-b3-parentspanid']) {
-          config.headers['x-b3-parentspanid'] = req?.headers?.[
-            'x-b3-parentspanid'
-          ] as string;
+          config.headers.set('x-b3-parentspanid', req?.headers?.['x-b3-parentspanid'] as string);
         }
+
         if (req?.headers?.['x-b3-spanid']) {
-          config.headers['x-b3-spanid'] = req?.headers?.[
-            'x-b3-spanid'
-          ] as string;
+          config.headers.set('x-b3-spanid', req?.headers?.['x-b3-spanid'] as string);
         }
+
         if (req?.headers?.['x-b3-sampled']) {
-          config.headers['x-b3-sampled'] = req?.headers?.[
-            'x-b3-sampled'
-          ] as string;
+          config.headers.set('x-b3-sampled', req?.headers?.['x-b3-sampled'] as string);
         }
+
         return config;
       },
       function (error) {
         return Promise.reject(error);
-      },
+      }
     );
 
     axios.interceptors.response.use(function (response) {
-      if (response.data.code === 'SID_INVALID') {
+      if (QUIT_LOGIN_CODE.includes(response.data.code)) {
         const res = context.res;
         if (res) {
           try {
-            res.setHeader('Location', LOGIN_PATH);
-            res.statusCode = 302;
-          } catch (error) {
-            console.error(error);
-          }
+            if (!context.pathname.includes(LOGIN_PATH)) {
+              res.setHeader('Location', LOGIN_PATH);
+              res.statusCode = 302;
+            }
+          } catch (error) {}
         }
       }
       return response;
@@ -72,37 +95,27 @@ export function ajaxInterceptorsInServer(context: NextPageContext) {
 
 export function ajaxInterceptorsInClient() {
   if (!isServer) {
+    axios.interceptors.request.clear();
+    axios.interceptors.response.clear();
+
     axios.interceptors.request.use(
       function (config) {
         // 避免多次注册多次执行
-        if (config?.headers?.['x-protocol']) {
+        if (config?.headers.get('X-Requested-With')) {
           return config;
         }
 
-        if (!config.headers) {
-          config.headers = {};
-        }
-        config.headers['x-protocol'] = 'highway';
+        config.headers.set('X-Requested-With', 'XMLHttpRequest');
+
         if (cookie.get('csrf-token')) {
-          config.headers['csrf-token'] = cookie.get('csrf-token')!;
+          config.headers.set('csrf-token', cookie.get('csrf-token')!);
         }
+
         return config;
       },
       function (error) {
         return Promise.reject(error);
-      },
-    );
-
-    axios.interceptors.response.use(
-      function (response) {
-        if (response.data.code === 'SID_INVALID') {
-          Router.push(LOGIN_PATH);
-        }
-        return response;
-      },
-      function (error) {
-        return Promise.reject(error);
-      },
+      }
     );
   }
 }

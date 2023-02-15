@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/vocoWone/reaux-next/compare/v0.0.4...v0.0.5) (2023-02-15)
+
+
+### Bug Fixes
+
+* docs & demo ([a849ac6](https://github.com/vocoWone/reaux-next/commit/a849ac60f056ab181f9f0985dd33a8ecd548600c))
+* getInitialProps exception ([668d659](https://github.com/vocoWone/reaux-next/commit/668d659e4a9ff42ac6d240c2a55a475dc6e187bf))
+
 ### [0.0.4](https://github.com/vocoWone/reaux-next/compare/v0.0.4-beta.12...v0.0.4) (2022-11-24)
 
 

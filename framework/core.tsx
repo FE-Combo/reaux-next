@@ -145,9 +145,9 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
   return {
     View,
     actions,
-    proxyLifeCycle: (View: ComponentType<any>) => {
+    proxyLifeCycle: function<T>(View: ComponentType<T>) {
       // register next view
-      const NextView = createView(handler, View) as ModuleView;
+      const NextView = createView(handler, View) as ModuleView<T>;
       NextView.getInitialProps = async (
         context: NextPageContext & { cache: AppCache },
       ) => {

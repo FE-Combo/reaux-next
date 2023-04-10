@@ -26,7 +26,11 @@ class ActionHandler extends Model<State> {
   async clickButton() {
     await helper.delay(1000);
     await this.setState({ name: 'click button' });
-    this.router.push('/about');
+    this.router.push('/home', {
+      query:{
+        t: new Date().getTime()
+      }
+    });
   }
 
   @helper.loading()

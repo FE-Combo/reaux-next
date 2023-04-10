@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/vocoWone/reaux-next/compare/v0.0.5...v0.0.6) (2023-04-10)
+
+
+### Bug Fixes
+
+* proxyLifeCycle type error ([3a334c2](https://github.com/vocoWone/reaux-next/commit/3a334c2f4652c476e45d130ea5cdb1d1a5746829))
+
 ### [0.0.5](https://github.com/vocoWone/reaux-next/compare/v0.0.4...v0.0.5) (2023-02-15)
 
 

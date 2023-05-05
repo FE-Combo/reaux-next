@@ -152,6 +152,9 @@ html {
 
 - Q: 相较于 dva 有什么优势？ 1.按需加载；2.更加健全的 ts 校验
 
+- Q: 频繁更新`loading`并使用`useSelector`时导致组件频繁重新渲染？
+  `useSelector` 并不能做到只有使用的值更新才重新渲染组件。当 Redux Store 中的状态发生变化时，useSelector 函数会检查整个状态对象，这是因为它是基于整个 Redux Store 中的状态进行比较和更新的。这种机制虽然会导致一些性能问题。为了避免这种情况，可以使用`React.memo`或`shallowEqual`或`Reselect`来优化组件的性能。
+
 - Q: 热更新失效？
 
   1. onReady 服务端执行时会导致热更新失效，onReady 实际是调用 next 的 getInitialProps 方法，getInitialProps 的热更新本身就存在问题，期待官方后续的修复。

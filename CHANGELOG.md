@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/vocoWone/reaux-next/compare/v0.0.6...v0.1.0) (2023-06-21)
+
+
+### Features
+
+* add lifecycle onTick/onShow/onHide ([2bbce5a](https://github.com/vocoWone/reaux-next/commit/2bbce5ab1f56c2e1718f4aae2dd6a4d35e99d851))
+
 ### [0.0.6](https://github.com/vocoWone/reaux-next/compare/v0.0.5...v0.0.6) (2023-04-10)
 
 

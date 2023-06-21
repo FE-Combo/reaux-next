@@ -1,10 +1,6 @@
-import React, {FC} from 'react';
+import React from 'react';
 
-interface Props {
-  name?: string
-}
-const Index: FC<Props> = () => {
+export default () => {
   return <div>home detail</div>;
 };
 
-export default Index;

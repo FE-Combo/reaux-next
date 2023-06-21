@@ -11,8 +11,10 @@ import {
   createReducer,
   App as AppCache,
   setModuleAction,
+  resetModuleAction,
   createModuleReducer,
   createApp as createBaseApp,
+  hasOwnLifecycle
 } from 'reaux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
@@ -33,6 +35,7 @@ import chalk from 'chalk';
 import { AppContext } from 'next/dist/pages/_app';
 import { NextPageContext } from 'next';
 import { UrlObject } from 'url';
+import { InView, ObserverInstanceCallback } from "react-intersection-observer";
 
 type Url = UrlObject | string;
 
@@ -91,7 +94,9 @@ function start<H extends Model>(
 }
 
 function register<H extends Model>(handler: H, Component: ModuleView) {
-  // TODO: 检测 module namespace重复，包括[@error, @loading, router]
+  if (["@error", "@loading", "router"].includes(handler.moduleName)) {
+    throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
+  }
 
   // create actions&handlers
   const { actions, actionHandlers } = createAction(handler);
@@ -99,7 +104,18 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
     modelInject(handler, actionHandlers, clientCache);
   }
 
-  const View = createView(handler, Component) as ModuleView;
+  // register view, attach lifecycle and viewport observer
+  let View;
+  if (hasOwnLifecycle(handler, "onShow") || hasOwnLifecycle(handler, "onHide")) {
+    View = withIntersectionObserver(
+      createView(handler, Component),
+      async (entry: Parameters<ObserverInstanceCallback>[1]) => await handler.onShow(entry),
+      async (entry: Parameters<ObserverInstanceCallback>[1]) => await handler.onHide(entry)
+  );
+  } else {
+    View = createView(handler, Component) as ModuleView;
+  }
+ 
   View.getInitialProps = async (
     context: NextPageContext & { cache: AppCache },
   ) => {
@@ -299,7 +315,7 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
 
   resetState() {
     this._cache.store.dispatch(
-      setModuleAction(this.moduleName, this.initState),
+      resetModuleAction(this.moduleName, this.initState),
     );
   }
 
@@ -319,6 +335,34 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
       prefetch: (url: string) => this.dispatch(prefetch(url)),
     };
   }
+}
+
+export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>) {
+  return class View extends React.PureComponent<T> {
+      constructor(props: T) {
+          super(props);
+      }
+
+      handleChange: ObserverInstanceCallback = async (inView, entry) => {
+          if (inView) {
+              await onShow(entry);
+          } else {
+              await onHide(entry);
+          }
+      };
+
+      render() {
+          return (
+              <InView onChange={this.handleChange}>
+                  {({ref}) => (
+                      <div ref={ref}>
+                          <Component {...this.props} />
+                      </div>
+                  )}
+              </InView>
+          );
+      }
+  };
 }
 
 export { start, register, Model, helper };

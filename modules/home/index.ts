@@ -22,6 +22,14 @@ class ActionHandler extends Model<State> {
     // unmount
   }
 
+  async onShow(): Promise<any> {
+    console.info("home detail onShow")
+  }
+
+  async onHide(): Promise<any> {
+    console.info("home detail onHide")
+  }
+
   @helper.loading('button')
   async clickButton() {
     await helper.delay(1000);

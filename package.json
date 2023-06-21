@@ -79,8 +79,9 @@
   "dependencies": {
     "@types/redux-logger": "~3.0.8",
     "connected-next-router": "~4.2.0",
+    "react-intersection-observer": "^9.5.1",
     "react-redux": "~8.0.4",
-    "reaux": "2.1.0-alpha.3",
+    "reaux": "~2.2.0",
     "redux-devtools-extension": "~2.13.9",
     "redux-logger": "~3.0.6",
     "tslib": "~2.3.1"

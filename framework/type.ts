@@ -51,11 +51,15 @@ export abstract class BaseModel<S = {}, R = any> {
     // Extends to be overrode
     // Similar to componentWillUnMount
   }
-  async onShow(): Promise<any> {
+  async onTick(): Promise<any> {
+    // Extends to be overrode
+    // Periodic call (default 1s), can use the @helper.interval decorator to specify the period (in seconds)
+  }
+  async onShow(...args: any[]): Promise<any> {
     // Extends to be overrode
     // Display in viewport
   }
-  async onHide(): Promise<any> {
+  async onHide(...args: any[]): Promise<any> {
     // Extends to be overrode
     // Disappear in viewport
   }

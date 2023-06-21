@@ -1,13 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import Link from 'next/link';
-import { helper, BaseModuleProps } from 'dist';
+import { BaseModuleProps } from 'dist';
 
 interface Props extends BaseModuleProps {
   isLoading: boolean;
 }
 
-const Index = (props: Props) => {
+export default function(props: Props) {
   const { Component, pageProps } = props;
   return (
     <div>
@@ -27,9 +26,3 @@ const Index = (props: Props) => {
     </div>
   );
 };
-
-export default connect(() => {
-  return {
-    isLoading: helper.isLoading(),
-  };
-})(Index);

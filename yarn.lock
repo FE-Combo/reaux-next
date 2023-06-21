@@ -3378,6 +3378,11 @@ react-dom@~18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-intersection-observer@^9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.5.1.tgz#63a6d7c45f7251610ad2f5a5abb85204ee0926ac"
+  integrity sha512-YwcNF/4WsMAG1rLVDQHSbpdEW9vDaIl4QW88d+vqeXNUewFV4AJDQB14oHpAJ3rRCnKRmwu3nqfwwYe6wioNIg==
+
 react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -3465,10 +3470,10 @@ readable-stream@~2.3.6:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-reaux@2.1.0-alpha.3:
-  version "2.1.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/reaux/-/reaux-2.1.0-alpha.3.tgz#11bb53ed76453520f9b4abf4227bd214b46e1bec"
-  integrity sha512-1Fiu71nRhrp9Wn6tR1eGqddlsDNBlOgQqBdGAOzJlb7IwlqzP0AYssEjk6NOTTmdIAMIarmu4tQmtLLq/dxfxQ==
+reaux@~2.2.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/reaux/-/reaux-2.2.1.tgz#3636f81406f1a514ee89989f9abf2e41a050540a"
+  integrity sha512-M3EQbDVO4p0yIHn3tIK0klxV3AOq7LI124JaewQFBQwGGr9uy3hsmMDktyFv2AMn2o3VZGrGzD3wwNb8XeyLsQ==
   dependencies:
     "@types/react" "~18.0.21"
     "@types/react-redux" "~7.1.24"

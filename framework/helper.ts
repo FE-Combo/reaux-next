@@ -1,7 +1,11 @@
 import { AnyAction } from 'redux';
 import { handlerDecorator, isServer } from './util';
 import { App as AppCache } from 'reaux';
-import { setModuleAction, createActionType } from 'reaux';
+import { ModelLifeCycle, setModuleAction, createActionType } from 'reaux';
+
+type ActionHandler = (...args: any[]) => any;
+
+type LifeCycleDecorator = (target: object, propertyKey: keyof ModelLifeCycle, descriptor: TypedPropertyDescriptor<ActionHandler & {interval?: number}>) => TypedPropertyDescriptor<ActionHandler>;
 
 export class Helper {
   private appCache: AppCache;
@@ -82,5 +86,12 @@ export class Helper {
 
   async delay(ms: number) {
     await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  interval(value = 1): LifeCycleDecorator {
+    return (target, propertyKey, descriptor) => {
+        descriptor.value!.interval = value * 1000;
+        return descriptor;
+    };
   }
 }

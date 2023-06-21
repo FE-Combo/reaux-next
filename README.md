@@ -32,6 +32,7 @@
   - inClient: 装饰器，应用于`onReady`,指定该生命周期执行于客户端
   - loading: 装饰器，统一管理 loading 状态，执行于客户端
   - isLoading: 判断是否处于 loading 状态，执行于客户端
+  - interval: 仅适用于 onTick()，指定以秒为单位的刻度间隔。
 
 - Model：生成 model 的父类
   - onReady: 相当于 getInitialProps
@@ -41,8 +42,9 @@
   - onLoad: 相当于 componentDidMount，顶层模块会在子模块加载完成后执行
   - onUpdate: 相当于 componentDidUpdate
   - onUnLoad: 相当于 componentWillUnmount
-  - onShow: 当前模块在 viewport 中触发
-  - onHide: 当前模块不在 viewport 中触发
+  - onTick: 周期调用（默认1s），可以使用@helper.interval装饰器指定周期（以秒为单位）
+  - onShow: 当前模块在 viewport 中触发，无法用于 proxyLifeCycle 组件
+  - onHide: 当前模块不在 viewport 中触发，无法用于 proxyLifeCycle 组件
   - state: 当前模块 state
   - rootState: 全局 state
   - resetState: 重置 state

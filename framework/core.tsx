@@ -27,6 +27,7 @@ import {
   replace,
   prefetch,
   routerReducer,
+  initialRouterState
 } from 'connected-next-router';
 import { StateView, BaseModel as NextBaseModel, ModuleView } from './type';
 import { createStore, applyMiddleware, AnyAction } from 'redux';
@@ -56,28 +57,35 @@ const patchedRouter = new Proxy(Router, {
 });
 
 // TODO: Dynamic and static separation
-function createAppCache(): AppCache {
+function createAppCache(path: string = "/"): AppCache {
   const applyMiddlewares = [
     createRouterMiddleware({ Router: patchedRouter }),
     createLogger({ collapsed: true, predicate: () => false }),
     middleware(() => newCache.actionHandlers),
   ];
   const store = createStore(
-    createReducer(),
+    // router reducer 必须在 store 生成之前创建，不能通过动态注入 reducer 方式 
+    createReducer({router: routerReducer}),
+    // 初始化服务端 redux router state 为当前路由 path 
+    // 若未初始化会导致在服务端首次加载时获取到 redux router 值为 "/"
+    {
+      router: initialRouterState(path)
+    },
     composeWithDevTools({
       predicate: (_state, action) =>
         !/^@@framework\/actionsHandler/.test(action.type),
     })(applyMiddleware(...applyMiddlewares)),
   );
   const newCache = createBaseApp(store);
+
+  // 保存 router reducer 到 asyncReducers 中, 用于后续动态注入
   newCache.asyncReducers['router'] = routerReducer;
-  newCache.store.replaceReducer(createReducer(newCache.asyncReducers));
   return newCache;
 }
 
 // 客户端缓存直接存储在全局
 // 服务端缓存存储在ctx上，执行顺序：App getInitialProps -> Sub App getInitialProps -> App constructor
-const clientCache = isServer ? null : createAppCache();
+const clientCache = isServer ? null : createAppCache(location.pathname);
 
 // helper中redux相关逻辑只在客户端执行
 const helper = new Helper(clientCache);
@@ -245,7 +253,7 @@ function createApp(
         }
         // It will only be executed on the server side, not on the client side
         // cahce in server, void global variable
-        context.ctx.cache = createAppCache();
+        context.ctx.cache = createAppCache(context.ctx.asPath);
       }
 
       const appProps =

@@ -3470,10 +3470,10 @@ readable-stream@~2.3.6:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-reaux@~2.2.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/reaux/-/reaux-2.2.1.tgz#3636f81406f1a514ee89989f9abf2e41a050540a"
-  integrity sha512-M3EQbDVO4p0yIHn3tIK0klxV3AOq7LI124JaewQFBQwGGr9uy3hsmMDktyFv2AMn2o3VZGrGzD3wwNb8XeyLsQ==
+reaux@~2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/reaux/-/reaux-2.3.0.tgz#21f77deb524148b292248ea67acfb5533f00362d"
+  integrity sha512-mGZORTe6Ch+SIARY1H38ioNbm16ccvzfvpp8WT2DVvEJ6pxQMpQDzAWerCdu4q4dIIbUU6s4P2C+MR8HMEbkUQ==
   dependencies:
     "@types/react" "~18.0.21"
     "@types/react-redux" "~7.1.24"

@@ -31,7 +31,7 @@ import {
 } from 'connected-next-router';
 import { StateView, BaseModel as NextBaseModel, ModuleView } from './type';
 import { createStore, applyMiddleware, AnyAction } from 'redux';
-import { isServer } from './util';
+import { isServer, filterObject } from './util';
 import chalk from 'chalk';
 import { AppContext } from 'next/dist/pages/_app';
 import { NextPageContext } from 'next';
@@ -138,7 +138,8 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
         }
         modelInject(handler, actionHandlers, context.cache);
         // model 赋予 cache
-        handler._cache = context.cache;
+        // as any: _cache is protected
+        (handler as any)._cache = context.cache;
       }
   
       const onReady = handler.onReady.bind(handler) as any as ((
@@ -225,7 +226,7 @@ function modelInject<H extends Model>(
   // register reducer
   const currentModuleReducer = createModuleReducer(
     handler.moduleName,
-    handler.initState,
+    handler.initialState,
   );
   // TODO: using cache.injectReducer
   cache.asyncReducers[handler.moduleName] = currentModuleReducer;
@@ -300,17 +301,13 @@ function createApp(
 
 // TODO: move to reaux
 class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
-  public _cache: AppCache = isServer ? undefined : clientCache;
-  public constructor(readonly moduleName: string, readonly initState: S) {
+  protected _cache: AppCache = isServer ? undefined : clientCache;
+  public constructor(readonly moduleName: string, readonly initialState: S) {
     super();
   }
 
   get state(): Readonly<S> {
     return this._cache.store.getState()[this.moduleName];
-  }
-
-  get initialState(): Readonly<S> {
-    return this.initState;
   }
 
   get rootState(): Readonly<R> {
@@ -321,17 +318,22 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
     this._cache.store.dispatch(setModuleAction(this.moduleName, newState));
   }
 
-  resetState() {
-    this._cache.store.dispatch(
-      resetModuleAction(this.moduleName, this.initState),
-    );
+  resetState(key?: (keyof S)[] | (keyof S)) {
+    if(key) {
+      const nextState = filterObject(this.initialState, key);
+      this._cache.store.dispatch(resetModuleAction(this.moduleName, nextState))
+    } else {
+      this._cache.store.dispatch(
+        resetModuleAction(this.moduleName, this.initialState),
+      );
+    }
   }
 
   dispatch(action: AnyAction) {
     this._cache.store.dispatch(action);
   }
 
-  get router() {
+  protected get router() {
     return {
       go: (number: number) => this.dispatch(go(number)),
       goBack: () => this.dispatch(goBack()),
@@ -345,7 +347,7 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
   }
 }
 
-export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>) {
+function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>) {
   return class View extends React.PureComponent<T> {
       constructor(props: T) {
           super(props);
@@ -373,4 +375,4 @@ export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow:
   };
 }
 
-export { start, register, Model, helper };
+export { start, register, Model, helper, withIntersectionObserver };

@@ -1,6 +1,7 @@
 import { NextPageContext } from 'next';
 import { State, ErrorState, LoadingState } from 'reaux';
 import { RouterState } from 'connected-next-router';
+
 export interface StateView extends State {
   '@error': ErrorState;
   '@loading': Partial<LoadingState>;
@@ -27,7 +28,7 @@ export type ModuleView<T=any, R=any> = React.ComponentType<T> & {
 
 export abstract class BaseModel<S = {}, R = any> {
   abstract readonly moduleName: string;
-  abstract readonly initState: S;
+  abstract readonly initialState: S;
   abstract state: Readonly<S>;
   abstract rootState: Readonly<R>;
   abstract setState(newState: Partial<S>): void;

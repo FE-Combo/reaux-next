@@ -13,13 +13,9 @@ class ActionHandler extends Model<State> {
   }
 
   async test() {
-    this.setState({test: "test"})
+    this.router.push('/home');
   }
-
-  async reset() {
-    this.resetState();
-  }
-
+  
   async onShow(): Promise<any> {
     console.info("about onShow")
   }

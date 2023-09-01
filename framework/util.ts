@@ -46,3 +46,17 @@ export function handlerDecorator<S extends StateView>(
 
 export const isServer =
   process && typeof process === 'object' && typeof window === 'undefined';
+
+
+export function filterObject<S extends {}, K extends keyof S>(state: S, keys: K | K[]) {
+  const filteredObj = {} as Pick<S, K>;
+  if (typeof keys === 'string') {
+    keys = [keys];
+  }
+  for (const key of keys as K[]) {
+    if (state.hasOwnProperty(key)) {
+      filteredObj[key] = state[key];
+    }
+  }
+  return filteredObj;
+}

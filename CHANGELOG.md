@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/vocoWone/reaux-next/compare/v0.1.1...v0.2.0) (2023-09-05)
+
+
+### Features
+
+* expose setState&resetState in actions ([3c085e2](https://github.com/vocoWone/reaux-next/commit/3c085e26e941a49f25b572ab41e340dd66996613))
+
 ### [0.1.1](https://github.com/vocoWone/reaux-next/compare/v0.1.0...v0.1.1) (2023-08-22)
 
 

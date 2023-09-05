@@ -40,19 +40,19 @@ export abstract class BaseModel<S = {}, R = any> {
     // Execute on the server or client before module render
     // Similar to getInitialProps in nextjs
   }
-  async onLoad(): Promise<any> {
+  async onLoad(...args: any[]): Promise<any> {
     // Extends to be overrode
     // Similar to componentDidMount
   }
-  async onUpdate(): Promise<any> {
+  async onUpdate(...args: any[]): Promise<any> {
     // Extends to be overrode
     // Similar to componentDidUpdate
   }
-  async onUnload(): Promise<any> {
+  async onUnload(...args: any[]): Promise<any> {
     // Extends to be overrode
     // Similar to componentWillUnMount
   }
-  async onTick(): Promise<any> {
+  async onTick(...args: any[]): Promise<any> {
     // Extends to be overrode
     // Periodic call (default 1s), can use the @helper.interval decorator to specify the period (in seconds)
   }

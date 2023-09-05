@@ -7,5 +7,5 @@ import { State as AboutState } from 'modules/about/type';
 export interface AllState extends StateView {
   main: MainState;
   home: HomeState;
-  abount: AboutState;
+  about: AboutState;
 }

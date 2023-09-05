@@ -101,7 +101,7 @@ function start<H extends Model>(
   return { View: App, actions };
 }
 
-function register<H extends Model>(handler: H, Component: ModuleView) {
+function register<H extends Model, P>(handler: H, Component: ModuleView<P>) {
   if (["@error", "@loading", "router"].includes(handler.moduleName)) {
     throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
   }
@@ -113,7 +113,7 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
   }
 
   // register view, attach lifecycle and viewport observer
-  let View;
+  let View: ModuleView<P>;
   if (hasOwnLifecycle(handler, "onShow") || hasOwnLifecycle(handler, "onHide")) {
     View = withIntersectionObserver(
       createView(handler, Component),
@@ -121,7 +121,7 @@ function register<H extends Model>(handler: H, Component: ModuleView) {
       async (entry: Parameters<ObserverInstanceCallback>[1]) => await handler.onHide(entry)
   );
   } else {
-    View = createView(handler, Component) as ModuleView;
+    View = createView(handler, Component);
   }
  
   View.getInitialProps = async (
@@ -347,7 +347,7 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
   }
 }
 
-function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>) {
+function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>): ModuleView<T> {
   return class View extends React.PureComponent<T> {
       constructor(props: T) {
           super(props);

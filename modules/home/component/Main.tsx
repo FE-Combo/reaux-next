@@ -3,8 +3,10 @@ import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../index';
 import { AllState } from '../../../utils/state';
-import { View as HomeView } from "modules/about"
+import dynamic from 'next/dynamic';
 import Router from 'next/router';
+
+const DynamicHomeView = dynamic(() => import('modules/about').then(_=>_.View), {ssr: false});
 
 export default () => {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ export default () => {
 
   return (
     <>
-      <div>
+      <div className='home'>
         <span>{name}</span>
         &nbsp;&nbsp;
         <i18n>名字</i18n>
@@ -88,7 +90,7 @@ export default () => {
       <br/>
       <br/>
       <br/>
-      <HomeView />
+      <DynamicHomeView />
     </>
   );
 };

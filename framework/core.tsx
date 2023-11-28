@@ -5,7 +5,7 @@ import { createLogger } from 'redux-logger';
 import React, { ComponentType, ComponentClass } from 'react';
 import {
   createAction,
-  middleware,
+  promiseMiddleware,
   createView,
   createActionType,
   createReducer,
@@ -61,7 +61,7 @@ function createAppCache(path: string = "/"): AppCache {
   const applyMiddlewares = [
     createRouterMiddleware({ Router: patchedRouter }),
     createLogger({ collapsed: true, predicate: () => false }),
-    middleware(() => newCache.actionHandlers),
+    promiseMiddleware(() => newCache.actionHandlers),
   ];
   const store = createStore(
     // router reducer 必须在 store 生成之前创建，不能通过动态注入 reducer 方式 

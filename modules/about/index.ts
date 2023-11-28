@@ -14,7 +14,7 @@ class ActionHandler extends Model<State> {
     console.info('about: only in server');
   }
 
-  async onUpdate(...args: any[]){
+  async onUpdate(...args){
     console.info("about onUpdate", args)
   }
 
@@ -22,11 +22,11 @@ class ActionHandler extends Model<State> {
     this.router.push('/home');
   }
   
-  async onShow(): Promise<any> {
+  async onShow() {
     console.info("about onShow")
   }
 
-  async onHide(): Promise<any> {
+  async onHide() {
     console.info("about onHide")
   }
 

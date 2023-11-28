@@ -1,6 +1,6 @@
 import React from 'react';
 
 export default () => {
-  return <div>home detail</div>;
+  return <div className='home-detail'>home detail</div>;
 };
 

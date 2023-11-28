@@ -9,7 +9,7 @@ interface Props extends BaseModuleProps {
 export default function(props: Props) {
   const { Component, pageProps } = props;
   return (
-    <div>
+    <div className='main'>
       <div>
         <Link href="/">
           <a style={{ color: '#000', fontSize: 30 }}>/</a>

@@ -9,7 +9,7 @@ export default (props: Props) => {
   const {name} = props;
   const dispatch = useDispatch();
   return (
-    <div>
+    <div className='about'>
       <div>about {name}</div>
       <button onClick={()=>dispatch(actions.test())}>change</button>
       <button onClick={()=>dispatch(actions.setState({name:"new about"}))}>set state</button>

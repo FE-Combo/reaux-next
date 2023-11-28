@@ -81,7 +81,9 @@ export function ajaxInterceptorsInServer(context: NextPageContext) {
             res.setHeader('set-cookie', response.headers['set-cookie']);
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error(error)
+      }
       if (QUIT_LOGIN_CODE.includes(response.data.code)) {
         const res = context.res;
         if (res) {
@@ -90,7 +92,9 @@ export function ajaxInterceptorsInServer(context: NextPageContext) {
               res.setHeader('Location', LOGIN_PATH);
               res.statusCode = 302;
             }
-          } catch (error) {}
+          } catch (error) {
+            console.error(error)
+          }
         }
       }
       return response;

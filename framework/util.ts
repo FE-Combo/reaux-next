@@ -54,7 +54,7 @@ export function filterObject<S extends {}, K extends keyof S>(state: S, keys: K 
     keys = [keys];
   }
   for (const key of keys as K[]) {
-    if (state.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(state, key)) {
       filteredObj[key] = state[key];
     }
   }

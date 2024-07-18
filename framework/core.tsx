@@ -287,6 +287,21 @@ function createApp(
       }
     }
 
+    // componentWillUnmount will only execute if componentDidMount is explicitly used.
+    componentDidMount() {}
+
+    componentWillUnmount() {
+      // HACK: https://github.com/facebook/react/pull/19523
+      // Enhance DEV compatibility for effects running from create() to create() -> destroy() -> create()
+      const namespaces = Object.keys((this.props as any).initialReduxState);
+      namespaces.forEach((namespace) => {
+        clientCache.store.dispatch({
+          type: createActionType(namespace),
+          payload: (this.props as any).initialReduxState[namespace],
+        });
+      });
+    }
+
     render() {
       return (
         <Provider store={isServer ? this.props.cache.store : clientCache.store}>

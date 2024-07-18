@@ -11,11 +11,16 @@ const initialState: State = {
 class ActionHandler extends Model<State> {
   @helper.inServer()
   async onReady() {
+    this.setState({name: "new about"});
     console.info('about: only in server');
   }
 
   async onUpdate(...args){
     console.info("about onUpdate", args)
+  }
+
+  async onUnload() {
+    this.resetState()
   }
 
   async test() {

@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/FE-Combo/reaux-next/compare/v0.0.4...v0.2.2) (2024-07-18)
+
+
+### Features
+
+* add lifecycle onTick/onShow/onHide ([2bbce5a](https://github.com/FE-Combo/reaux-next/commit/2bbce5ab1f56c2e1718f4aae2dd6a4d35e99d851))
+* expose setState&resetState in actions ([3c085e2](https://github.com/FE-Combo/reaux-next/commit/3c085e26e941a49f25b572ab41e340dd66996613))
+
+
+### Bug Fixes
+
+* docs & demo ([a849ac6](https://github.com/FE-Combo/reaux-next/commit/a849ac60f056ab181f9f0985dd33a8ecd548600c))
+* getInitialProps exception ([668d659](https://github.com/FE-Combo/reaux-next/commit/668d659e4a9ff42ac6d240c2a55a475dc6e187bf))
+* initial router state ([c5f33e7](https://github.com/FE-Combo/reaux-next/commit/c5f33e7a7a27600a5315b6094e7d7ef1f1a8a2a8))
+* proxyLifeCycle type error ([3a334c2](https://github.com/FE-Combo/reaux-next/commit/3a334c2f4652c476e45d130ea5cdb1d1a5746829))
+
 ### [0.2.1](https://github.com/vocoWone/reaux-next/compare/v0.2.0...v0.2.1) (2023-11-28)
 
 ## [0.2.0](https://github.com/vocoWone/reaux-next/compare/v0.1.1...v0.2.0) (2023-09-05)

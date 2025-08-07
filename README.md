@@ -3,6 +3,15 @@
 
 <img width="100" src="./logo.png"/> <img width="150" src="https://www.nextjs.cn/static/images/nextjs-logo.png"/>
 
-## 动机
+## 📦 简介
 
-基于 [next](https://nextjs.org/) ➕ [reaux](https://github.com/FE-Combo/reaux) 数据流方案，统一数据流和应用结构，简化开发体验
+reaux-next 是一个基于 Next.js 和 reaux 的轻量级状态管理解决方案，旨在统一数据流和页面结构，提升在 Next.js 中使用 Reaux 的开发体验。
+
+> **⚠️ 仅适用于 Next.js Pages 路由模式**
+>
+> 当前不支持 Next.js 的 App Router 模式（app 目录）。
+
+## 🚀 安装
+```bash
+npm install reaux-next
+```

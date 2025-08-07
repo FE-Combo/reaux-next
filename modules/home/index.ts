@@ -22,11 +22,11 @@ class ActionHandler extends Model<State> {
     // unmount
   }
 
-  async onShow(): Promise<any> {
+  async onShow() {
     console.info("home detail onShow")
   }
 
-  async onHide(): Promise<any> {
+  async onHide() {
     console.info("home detail onHide")
   }
 
@@ -35,7 +35,7 @@ class ActionHandler extends Model<State> {
     await helper.delay(1000);
     await this.setState({ name: 'click button' });
     this.router.push('/home', {
-      query:{
+      query: {
         t: new Date().getTime()
       }
     });

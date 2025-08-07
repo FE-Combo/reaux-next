@@ -16,7 +16,7 @@ import {
   createApp as createBaseApp,
   hasOwnLifecycle
 } from 'reaux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import {
   ConnectedRouter,
   createRouterMiddleware,
@@ -30,7 +30,7 @@ import {
   initialRouterState
 } from 'connected-next-router';
 import { StateView, BaseModel as NextBaseModel, ModuleView } from './type';
-import { createStore, applyMiddleware, AnyAction } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware, AnyAction, Middleware } from 'redux';
 import { isServer, filterObject } from './util';
 import chalk from 'chalk';
 import { AppContext } from 'next/dist/pages/_app';
@@ -62,10 +62,10 @@ function createAppCache(path: string = "/"): AppCache {
     createRouterMiddleware({ Router: patchedRouter }),
     createLogger({ collapsed: true, predicate: () => false }),
     promiseMiddleware(() => newCache.actionHandlers),
-  ];
+  ] as Middleware[];
   const store = createStore(
     // router reducer 必须在 store 生成之前创建，不能通过动态注入 reducer 方式 
-    createReducer({router: routerReducer}),
+    createReducer({ router: routerReducer }),
     // 初始化服务端 redux router state 为当前路由 path 
     // 若未初始化会导致在服务端首次加载时获取到 redux router 值为 "/"
     {
@@ -119,11 +119,11 @@ function register<H extends Model, P>(handler: H, Component: ModuleView<P>) {
       createView(handler, Component),
       async (entry: Parameters<ObserverInstanceCallback>[1]) => await handler.onShow(entry),
       async (entry: Parameters<ObserverInstanceCallback>[1]) => await handler.onHide(entry)
-  );
+    );
   } else {
     View = createView(handler, Component);
   }
- 
+
   View.getInitialProps = async (
     context: NextPageContext & { cache: AppCache },
   ) => {
@@ -131,8 +131,7 @@ function register<H extends Model, P>(handler: H, Component: ModuleView<P>) {
       if (isServer) {
         if (!isProd) {
           console.info(
-            `${chalk.green('ready')} - ${
-              handler.moduleName
+            `${chalk.green('ready')} - ${handler.moduleName
             } getInitialProps successfully`,
           );
         }
@@ -141,7 +140,7 @@ function register<H extends Model, P>(handler: H, Component: ModuleView<P>) {
         // as any: _cache is protected
         (handler as any)._cache = context.cache;
       }
-  
+
       const onReady = handler.onReady.bind(handler) as any as ((
         context: NextPageContext,
       ) => Promise<any>) & { inClient: boolean; inServer: boolean };
@@ -164,13 +163,13 @@ function register<H extends Model, P>(handler: H, Component: ModuleView<P>) {
     } catch (error) {
       console.error(error)
       return {};
-    } 
+    }
   };
 
   return {
     View,
     actions,
-    proxyLifeCycle: function<T>(View: ComponentType<T>) {
+    proxyLifeCycle: function <T>(View: ComponentType<T>) {
       // register next view
       const NextView = createView(handler, View) as ModuleView<T>;
       NextView.getInitialProps = async (
@@ -180,14 +179,13 @@ function register<H extends Model, P>(handler: H, Component: ModuleView<P>) {
           if (isServer) {
             if (!isProd) {
               console.info(
-                `${chalk.green('ready')} - ${
-                  handler.moduleName
+                `${chalk.green('ready')} - ${handler.moduleName
                 } getInitialProps successfully`,
               );
             }
             modelInject(handler, actionHandlers, context.cache);
           }
-  
+
           const onReady = handler.onReady.bind(handler) as any as ((
             context: NextPageContext,
           ) => Promise<any>) & { inClient: boolean; inServer: boolean };
@@ -288,7 +286,7 @@ function createApp(
     }
 
     // componentWillUnmount will only execute if componentDidMount is explicitly used.
-    componentDidMount() {}
+    componentDidMount() { }
 
     componentWillUnmount() {
       // HACK: https://github.com/facebook/react/pull/19523
@@ -334,7 +332,7 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
   }
 
   resetState(key?: (keyof S)[] | (keyof S)) {
-    if(key) {
+    if (key) {
       const nextState = filterObject(this.initialState, key);
       this._cache.store.dispatch(resetModuleAction(this.moduleName, nextState))
     } else {
@@ -364,29 +362,29 @@ class Model<S = {}, R = StateView> extends NextBaseModel<S, R> {
 
 function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => Promise<any>): ModuleView<T> {
   return class View extends React.PureComponent<T> {
-      constructor(props: T) {
-          super(props);
-      }
+    constructor(props: T) {
+      super(props);
+    }
 
-      handleChange: ObserverInstanceCallback = async (inView, entry) => {
-          if (inView) {
-              await onShow(entry);
-          } else {
-              await onHide(entry);
-          }
-      };
-
-      render() {
-          return (
-              <InView onChange={this.handleChange}>
-                  {({ref}) => (
-                      <div ref={ref}>
-                          <Component {...this.props} />
-                      </div>
-                  )}
-              </InView>
-          );
+    handleChange: ObserverInstanceCallback = async (inView, entry) => {
+      if (inView) {
+        await onShow(entry);
+      } else {
+        await onHide(entry);
       }
+    };
+
+    render() {
+      return (
+        <InView onChange={this.handleChange}>
+          {({ ref }) => (
+            <div ref={ref}>
+              <Component {...this.props} />
+            </div>
+          )}
+        </InView>
+      );
+    }
   };
 }
 

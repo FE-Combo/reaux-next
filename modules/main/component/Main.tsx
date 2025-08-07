@@ -6,20 +6,20 @@ interface Props extends BaseModuleProps {
   isLoading: boolean;
 }
 
-export default function(props: Props) {
+export default function (props: Props) {
   const { Component, pageProps } = props;
   return (
     <div className='main'>
       <div>
         <Link href="/">
-          <a style={{ color: '#000', fontSize: 30 }}>/</a>
+          /
         </Link>
         <Link href="/home">
-          <a style={{ color: '#000', fontSize: 30 }}>home</a>
+          home
         </Link>
         &nbsp;&nbsp;
         <Link href="/about">
-          <a style={{ color: '#000', fontSize: 30 }}>about</a>
+          about
         </Link>
       </div>
       <Component {...pageProps} />

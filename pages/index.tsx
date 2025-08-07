@@ -1,3 +1,6 @@
 import React from 'react';
 
-export default () => <div></div>;
+const IndexPage = () => <div></div>;
+IndexPage.displayName = 'IndexPage';
+
+export default IndexPage;
